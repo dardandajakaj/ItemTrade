@@ -24,7 +24,7 @@ namespace API.Controllers
             _tokenService = tokenservice;
         }
 
-        [HttpGet("register")]
+        [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto){
 
             if(await UserExits(registerDto.Username)) return BadRequest("Username is taken");
