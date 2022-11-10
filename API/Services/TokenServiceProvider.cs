@@ -19,7 +19,7 @@ namespace API.Services
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token"]));
         }
 
-        public string CreateToken(AppUser user)
+        public string CreateToken(User user)
         {
             var claims = new List<Claim>(){
                 new Claim(JwtRegisteredClaimNames.NameId, user.UserName)

@@ -2,7 +2,6 @@ import { Component, OnInit, TemplateRef} from '@angular/core';
 import { UrlSerializer } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { RegisterDto } from '../_Models/RegisterDto';
-import { User } from '../_Models/User';
 import { AccountService } from '../_Services/account-service.service';
 
 @Component({

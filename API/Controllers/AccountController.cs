@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using API.Data;
 using API.Dto;
 using API.Entity;
@@ -12,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
-{ 
+{
     public class AccountController : BaseApiController
     {
        
@@ -30,7 +26,7 @@ namespace API.Controllers
             if(await UserExits(registerDto.Username)) return BadRequest("Username is taken");
 
             using (var hmac = new HMACSHA512()){
-                var user = new AppUser(){
+                var user = new User(){
                     UserName = registerDto.Username,
                     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
                     PasswordSalt = hmac.Key
@@ -47,7 +43,7 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto){
 
-            var user = await _context.Users.SingleOrDefaultAsync<AppUser>(x => x.UserName.ToLower() == loginDto.Username.ToLower());
+            var user = await _context.Users.SingleOrDefaultAsync<User>(x => x.UserName.ToLower() == loginDto.Username.ToLower());
 
             if(user == null) return BadRequest("No User found!");
 

@@ -1,0 +1,43 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-7 mr-2 photo-section">
+      <img src="#" alt="some photo here">
+    </div>
+    <div class="col-md-5 signup-form">
+      <div class="section-header">
+        <h3>Sign Up</h3>
+      </div>
+      <div class="section-container">
+        <form (ngSubmit)="createProfile()" #form="ngForm" autocomplete="off">
+          <input autocomplete="false" type="hidden" name="hidden">
+          <!--FullName-->
+          <label for="fullname">Fullname</label>
+          <div class="form-item">
+            <input type="text" name="fullname" id="fullname" placeholder="Fullname here...">
+          </div>
+          <!--Email-->
+          <label for="email">Email</label>
+          <div class="form-item">
+            <input type="email" name="email" id="email" placeholder="Email here">
+          </div>
+          <!--Password-->
+          <label for="password">Password</label>
+          <div class="form-item">
+            <input type="password" name="password" id="password" placeholder="Your password...">
+          </div>
+          <!--Repeat Password-->
+          <label for="password2">Repeat Password</label>
+          <div class="form-item">
+            <input type="password" name="password2" id="password2" placeholder="Repeat your password...">
+          </div>
+          <div class="form-control">
+            <input type="checkbox" name="agreeTerms" id="agreeTerms"> I have read and agree to the Terms of Use
+          </div>
+          <button type="submit" class="mt-3 signin-button">Sign Up</button>
+          <a href="#" class="mt-3 login-link" >Login</a>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
