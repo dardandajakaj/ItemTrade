@@ -1,10 +1,12 @@
-using API.Entity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace API.Dto
 {
-    public class ProductDto
+    public class RegisterProductDto
     {
-        public int ProductId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int InsertedBy { get; set; }
@@ -12,8 +14,5 @@ namespace API.Dto
         public int CategoryId { get; set; }
         public float Price { get; set; }
         public bool IsSale { get; set; }
-        public string Owner { get; set; }
-        public string Address { get; set; }
-        public string CategoryName { get; set; }
     }
 }

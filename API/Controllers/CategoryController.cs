@@ -15,39 +15,43 @@ namespace API.Controllers
             this._context = context;
         }
 
-        [HttpPost("AddCategory")]
-        public async Task<ActionResult> AddCategory(CategoryDto categoryDto){
-            if(await _context.Categories.AnyAsync(x=> x.Name == categoryDto.Name)){
-                return BadRequest("Username is taken");
-            }
-
-            var category = new Category{
-                Name = categoryDto.Name,
-                VAT = categoryDto.VAT,
-                AddedBy = categoryDto.AddedBy,
-                AddedOn = categoryDto.AddedOn
-            };
+        [HttpPost("add")]
+        public async Task<ActionResult> AddCategory(Category category){
+            if(!await _context.Categories.AnyAsync(x=> x.Name == category.Name)){
+                return BadRequest("Category already exists");
+            }            
             
             _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
-
-            if(await _context.Categories.AnyAsync(x => x.Name == categoryDto.Name)){
-                return Accepted("Succeeded");
+            if(await _context.SaveChangesAsync()>0){
+                return Ok("Successfully added");
             }else{
-                return BadRequest("Ups Something went south!");
+                return BadRequest("Something went South!");
             }
+
+            
         }
 
         [HttpGet("ListCategories")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<CategoryDto>>> ListCategories(){
-            return await (from category in _context.Set<Category>()
-                            select new CategoryDto{
-                                Name = category.Name,
-                                VAT = category.VAT,
-                                AddedBy = category.AddedBy,
-                                AddedOn = category.AddedOn
-                            }).ToListAsync();
+        public async Task<ActionResult<IEnumerable<Category>>> ListCategories(){
+            return await _context.Categories.ToListAsync();
+        }
+
+        [HttpGet("DeleteCategory")]
+        [Authorize]
+        public async Task<ActionResult> DeleteCategory(int categoryId, int userId){
+            if(!await _context.Users.Where(x => x.Role == 2 && x.Id == userId).AnyAsync()){
+                return BadRequest("You are not allowed to do that!");
+            }
+            var category = await _context.Categories.Where(x => x.CategoryId == categoryId).FirstOrDefaultAsync();
+            if(category != null) {
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+                return Ok("Category deleted successfully");
+            }else{
+                return BadRequest("Category not found");
+            }
+            
         }
     }
 }

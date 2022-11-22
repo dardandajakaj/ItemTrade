@@ -6,7 +6,7 @@ namespace API.Entity
     public class Product
     {
         [Required]
-        public string ProductId { get; set; }
+        public int ProductId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int InsertedBy { get; set; }
@@ -20,5 +20,7 @@ namespace API.Entity
 
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
+
+        public ICollection<UserFavorites> UserFavorites { get; set; }
     }
 }

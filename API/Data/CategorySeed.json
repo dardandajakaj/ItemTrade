@@ -1,0 +1,45 @@
+
+[
+    {
+      "Name": "Electronic",
+      "VAT": 0.19,
+      "AddedBy": 3,
+      "AddedOn": "2022-11-10"
+    },
+    {
+      "Name": "Car",
+      "VAT": 0.22,
+      "AddedBy": 3,
+      "AddedOn": "2022-11-05"
+    },
+    {
+      "Name": "Fashion",
+      "VAT": 0.11,
+      "AddedBy": 2,
+      "AddedOn": "2022-11-09"
+    },
+    {
+      "Name": "Home & Garden",
+      "VAT": 0.19,
+      "AddedBy": 1,
+      "AddedOn": "2022-11-14"
+    },
+    {
+      "Name": "Food",
+      "VAT": 0.11,
+      "AddedBy": 3,
+      "AddedOn": "2022-11-01"
+    },
+    {
+      "Name": "Sports",
+      "VAT": 0.14,
+      "AddedBy": 2,
+      "AddedOn": "2022-11-08"
+    },
+    {
+      "Name": "Fashion",
+      "VAT": 0.15,
+      "AddedBy": 1,
+      "AddedOn": "2022-11-07"
+    }
+  ]

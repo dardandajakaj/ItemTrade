@@ -11,5 +11,7 @@ namespace API.Entity
 
         [ForeignKey("AddedBy")]
         public User User { get; set; }
+
+        public ICollection<Product> Products { get; set; }
     }
 }

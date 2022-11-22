@@ -10,7 +10,7 @@ namespace API.Entity
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public string ProductId { get; set; }
+        public int ProductId { get; set; }
         
         [ForeignKey("UserId")]
         public User User { get; set; }

@@ -4,6 +4,7 @@ using API.Data;
 using API.Dto;
 using API.Entity;
 using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,8 +15,10 @@ namespace API.Controllers
        
         private readonly DataContext _context;
         private readonly ITokenServiceProvider _tokenService;
+        private readonly IMapper _mapper;
 
-        public AccountController(DataContext context, ITokenServiceProvider tokenservice){
+        public AccountController(DataContext context, ITokenServiceProvider tokenservice, IMapper mapper){
+            _mapper = mapper;
             _context = context;
             _tokenService = tokenservice;
         }
@@ -27,16 +30,25 @@ namespace API.Controllers
 
             using (var hmac = new HMACSHA512()){
                 var user = new User(){
+                    Fullname = registerDto.Fullname,
+                    Email = registerDto.Email,
                     UserName = registerDto.Username,
                     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                    PasswordSalt = hmac.Key
+                    PasswordSalt = hmac.Key,
+                    Street = registerDto.Street,
+                    City = registerDto.City,
+                    State = registerDto.State,
+                    Phone = registerDto.Phone,
+                    DateOfBirth = registerDto.DateOfBirth,
+                    Registered = DateTime.Now,
+                    Role = 1,
+                    IsActive = true
                 }; 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
-                return new UserDto{
-                    Username = user.UserName,
-                    Token = _tokenService.CreateToken(user)
-                };
+                var userDto = _mapper.Map<UserDto>(user);
+                userDto.Token = _tokenService.CreateToken(user);
+                return userDto;
             }
         }
 
@@ -56,10 +68,9 @@ namespace API.Controllers
                     i++;
                 }
 
-                return new UserDto{
-                    Username = user.UserName,
-                    Token = _tokenService.CreateToken(user)
-                };;
+                var userDto = _mapper.Map<UserDto>(user);
+                userDto.Token = _tokenService.CreateToken(user);
+                return userDto; 
             }
         }
 
