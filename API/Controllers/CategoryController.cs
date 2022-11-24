@@ -17,7 +17,7 @@ namespace API.Controllers
 
         [HttpPost("add")]
         public async Task<ActionResult> AddCategory(Category category){
-            if(!await _context.Categories.AnyAsync(x=> x.Name == category.Name)){
+            if(await _context.Categories.AnyAsync(x=> x.Name == category.Name)){
                 return BadRequest("Category already exists");
             }            
             

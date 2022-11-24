@@ -26,8 +26,8 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(){
             var users = await _context.Users.ToListAsync();
             var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
-            for(int i = 1; i < users.Count; i++){
-                userDtos.ElementAt(i).Token = _tokenService.CreateToken(users[i-1]); 
+            for(int i = 0; i < users.Count; i++){
+                userDtos.ElementAt(i).Token = _tokenService.CreateToken(users[i]); 
             }
             return Ok(userDtos);
         }
