@@ -31,7 +31,7 @@ namespace API.Controllers
             
         }
 
-        [HttpGet("ListCategories")]
+        [HttpGet("list")]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Category>>> ListCategories(){
             return await _context.Categories.ToListAsync();

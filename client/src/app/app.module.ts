@@ -17,6 +17,8 @@ import { CreateProfileComponent } from './users/create-profile/create-profile.co
 import { EditProfileComponent } from './users/edit-profile/edit-profile.component';
 import { ShowItemComponent } from './item/show-item/show-item.component';
 import { CategoryComponent } from './category/category.component';
+import { CommonModule } from '@angular/common';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { CategoryComponent } from './category/category.component';
     EditProfileComponent,
     ShowItemComponent,
     CategoryComponent,
+    HomeComponent
   ],
   imports: [
     ModalModule.forRoot(),
@@ -39,7 +42,8 @@ import { CategoryComponent } from './category/category.component';
     AppRoutingModule,
     HttpClientModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    CommonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

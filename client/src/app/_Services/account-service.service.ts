@@ -1,16 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NgControlStatus } from '@angular/forms';
 import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { RegisterDto } from '../_Models/RegisterDto';
+import { environment } from 'src/environments/environment';
 import { User } from '../_Models/User';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
-  baseUrl = "https://localhost:7103/api/";
+  baseUrl = environment.url;
   constructor(private http: HttpClient) { }
   private currentUserSource = new ReplaySubject<User>(1);
   currentUser$ = this.currentUserSource.asObservable();

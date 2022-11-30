@@ -1,5 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Sen&display=swap');
+
+*{
+  font-family: 'Sen';
+  font-size: 1.2rem;
+}
 .content-section
 {
-  width: 60%;
+  width: 75%;
   margin: auto;
 }

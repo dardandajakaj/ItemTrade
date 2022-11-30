@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { User } from './_Models/User';
 import { AccountService } from './_Services/account-service.service';
 
 @Component({
@@ -9,7 +8,7 @@ import { AccountService } from './_Services/account-service.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  
+
   title = 'The Course App 1';
   user: any;
 
@@ -21,7 +20,6 @@ export class AppComponent implements OnInit{
   setCurrentUser(){
     let localUser = localStorage.getItem('user');
 
-    console.log(localUser);
     if(localUser != null){
       this.accountService.setCurrentUser(JSON.parse(localUser))
     }
