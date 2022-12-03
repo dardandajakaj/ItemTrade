@@ -3,4 +3,9 @@
 }
 #site-signing button.btn.btn-outline-success {
     width: 100px;
-}   
+}
+
+.web-container{
+  width: 90%;
+  margin: auto;
+}

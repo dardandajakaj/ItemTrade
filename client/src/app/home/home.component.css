@@ -17,13 +17,14 @@
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
-  display: block;
+  display: inline-block;
 }
 
 .input-category > input {
   margin-top: 1rem;
 }
 
+/* Dropdown category menu  */
 .category-section {
   clear: both;
   width: 100%;
@@ -43,3 +44,9 @@
 }
 
 #Categories:checked + .category-section {height: 300px;}
+/* Sort By Date CSS */
+
+label{
+  display: block;
+  margin-top: 5px;
+}

@@ -3,7 +3,7 @@
     <div class="col-md-2">
       <div id="sidebar">
         <label for="Categories"><span>Categories</span></label>
-        <input type="checkbox" id="Categories">
+        <input type="checkbox" id="Categories" checked/>
         <div class="category-section">
           <div *ngFor="let category of categories" class="input-category">
             <input
@@ -13,6 +13,18 @@
             />{{ category.name }}
           </div>
         </div>
+        <hr>
+        <label for="Price"><span>Price</span></label>
+        <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ngx-slider>
+        <hr>
+        <label for="PriceSort"><span>Sort By Price</span></label>
+        <input type="radio" name="PriceSort" id="Cheapest"><span>Cheapest</span><br>
+        <input type="radio" name="PriceSort" id="Expensive"><span>Most Expensive</span>
+        <hr>
+        <label for="Date"><span>Sort By Date</span></label>
+        <input type="radio" name="Date" id="Newest" value=1><span>Newest</span><br>
+        <input type="radio" name="Date" id="Oldest" value=2><span>Oldest</span>
+        <hr>
       </div>
     </div>
     <div class="col-md-10">
@@ -28,3 +40,4 @@
     </div>
   </div>
 </div>
+

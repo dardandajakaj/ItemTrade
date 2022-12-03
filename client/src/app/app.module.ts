@@ -19,6 +19,9 @@ import { ShowItemComponent } from './item/show-item/show-item.component';
 import { CategoryComponent } from './category/category.component';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home/home.component';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
+
+
 
 @NgModule({
   declarations: [
@@ -43,7 +46,8 @@ import { HomeComponent } from './home/home.component';
     HttpClientModule,
     NgbModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    NgxSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]
