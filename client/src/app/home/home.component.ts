@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { from } from 'rxjs';
 import { Category } from '../_Models/Category';
 import { LabelType, Options } from '@angular-slider/ngx-slider';
 import { CategoryService } from '../_Services/category.service';
+import { ProductService } from '../_Services/product.service';
+import { Product } from '../_Models/Product';
 
 @Component({
   selector: 'app-home',
@@ -28,17 +29,25 @@ export class HomeComponent implements OnInit {
     }
   };
   public categories: Category[];
-  constructor(private categoryService: CategoryService) {
+  public products: Product[];
+  constructor(private categoryService: CategoryService, private productService: ProductService) {
 
   }
 
   ngOnInit(): void {
     this.getCategories();
+    this.getProducts();
   }
 
   getCategories(){
     this.categoryService.getCategories().subscribe(categories => {
       this.categories = categories;
+    })
+  }
+
+  getProducts(){
+    this.productService.getProducts().subscribe(products => {
+      this.products = products;
     })
   }
 

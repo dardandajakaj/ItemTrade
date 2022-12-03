@@ -3,7 +3,7 @@
     <div class="col-md-2">
       <div id="sidebar">
         <label for="Categories"><span>Categories</span></label>
-        <input type="checkbox" id="Categories" checked/>
+        <input type="checkbox" id="Categories" checked />
         <div class="category-section">
           <div *ngFor="let category of categories" class="input-category">
             <input
@@ -13,26 +13,48 @@
             />{{ category.name }}
           </div>
         </div>
-        <hr>
+        <hr />
         <label for="Price"><span>Price</span></label>
-        <ngx-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options"></ngx-slider>
-        <hr>
+        <ngx-slider
+          [(value)]="minValue"
+          [(highValue)]="maxValue"
+          [options]="options"
+        ></ngx-slider>
+        <hr />
         <label for="PriceSort"><span>Sort By Price</span></label>
-        <input type="radio" name="PriceSort" id="Cheapest"><span>Cheapest</span><br>
-        <input type="radio" name="PriceSort" id="Expensive"><span>Most Expensive</span>
-        <hr>
+        <input type="radio" name="PriceSort" id="Cheapest" /><span
+          >Cheapest</span
+        ><br />
+        <input type="radio" name="PriceSort" id="Expensive" /><span
+          >Most Expensive</span
+        >
+        <hr />
         <label for="Date"><span>Sort By Date</span></label>
-        <input type="radio" name="Date" id="Newest" value=1><span>Newest</span><br>
-        <input type="radio" name="Date" id="Oldest" value=2><span>Oldest</span>
-        <hr>
+        <input type="radio" name="Date" id="Newest" value="1" /><span
+          >Newest</span
+        ><br />
+        <input type="radio" name="Date" id="Oldest" value="2" /><span
+          >Oldest</span
+        >
+        <hr />
       </div>
     </div>
     <div class="col-md-10">
       <div class="categories">
         <div class="row">
-          <div *ngFor="let category of categories" class="col-md-4">
-            <div class="card" (click)="navigateTo(category.categoryId)">
-              {{ category.name }}
+          <div
+            *ngFor="let product of products"
+            class="product"
+            (click)="navigateTo(product.productId)"
+          >
+            <div class="product-img">
+              <img src="../../assets/Images/no-image.jpg" alt="no photo" />
+            </div>
+            <div class="product-details">
+              <h3>{{ product.name }}</h3>
+              <p>{{ product.owner }}</p>
+              <p>{{ product.description }}</p>
+              <p>{{ product.price }}&euro;</p>
             </div>
           </div>
         </div>
@@ -40,4 +62,3 @@
     </div>
   </div>
 </div>
-
