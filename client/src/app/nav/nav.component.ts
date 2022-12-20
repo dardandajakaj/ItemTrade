@@ -15,8 +15,6 @@ export class NavComponent implements OnInit {
   model: any = {};
   constructor(private modalService: BsModalService, public accountService: AccountService) {}
 
-
-
   ngOnInit(): void {
   }
 
@@ -69,6 +67,5 @@ export class NavComponent implements OnInit {
 
   onLogout(){
     this.accountService.logout();
-
   }
 }

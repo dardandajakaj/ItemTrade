@@ -1,0 +1,15 @@
+<div class="suggestion" (click)="navigateTo(product.productId)">
+  <div class="image">
+    <img src="../../../assets/Images/no-image.jpg" alt="no-image" />
+  </div>
+  <div class="detail-card">
+    <p class="created">
+      {{ product.insertedOn | date : "longDate" }}
+    </p>
+    <p class="address">
+      {{ product.address }}<fa-icon [icon]="mapMarker"></fa-icon>
+    </p>
+    <p class="title">{{ product.name }}</p>
+    <p class="price">{{ product.price }}&euro;</p>
+  </div>
+</div>

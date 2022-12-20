@@ -38,9 +38,15 @@ namespace API.Controllers
             // ).ToListAsync();
         }
 
+        [HttpGet("item/{productId}")]
+        public async Task<ActionResult<ProductDto>> getProductById(int productId){
+            var product = await _context.Products.Include(u => u.User).Include(c => c.Category).Where(x => x.ProductId == productId).FirstOrDefaultAsync();
+            return Ok(_mapper.Map<ProductDto>(product));
+        }
+
         //List all items which have a similar name as the search term
         //Later, Pagination to be added
-        [HttpGet("item/{searchTerm}")]
+        [HttpGet("item/search/{searchTerm}")]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ProductDto>>> getProductByName(String searchTerm){
             //need autoMapper to Dto

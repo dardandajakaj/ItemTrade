@@ -4,6 +4,9 @@ import { LabelType, Options } from '@angular-slider/ngx-slider';
 import { CategoryService } from '../_Services/category.service';
 import { ProductService } from '../_Services/product.service';
 import { Product } from '../_Models/Product';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import { FormControl, FormGroup } from '@angular/forms';
+import { waitForAsync } from '@angular/core/testing';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +14,7 @@ import { Product } from '../_Models/Product';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
+  mapMarker = faMapMarkerAlt;
   minValue: number = 1;
   maxValue: number = 2000;
   options: Options = {
@@ -30,29 +33,26 @@ export class HomeComponent implements OnInit {
   };
   public categories: Category[];
   public products: Product[];
-  constructor(private categoryService: CategoryService, private productService: ProductService) {
-
-  }
+  constructor(private categoryService: CategoryService, private productService: ProductService) { }
 
   ngOnInit(): void {
     this.getCategories();
     this.getProducts();
   }
 
-  getCategories(){
+  getCategories() {
     this.categoryService.getCategories().subscribe(categories => {
       this.categories = categories;
     })
   }
 
-  getProducts(){
+  getProducts() {
     this.productService.getProducts().subscribe(products => {
       this.products = products;
     })
   }
 
-  navigateTo(categoryId: number){
-    console.log(categoryId)
-  }
+  filter(){
 
+  }
 }

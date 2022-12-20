@@ -1,0 +1,58 @@
+.suggestion {
+  display: flex;
+  margin: 10px 5px;
+  padding: 0;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid rgb(136, 136, 136);
+}
+
+.suggestion:hover{
+  cursor: pointer;
+}
+
+.detail-card {
+  position: relative;
+  width: 100%;
+}
+
+.image > img {
+  height: 100%;
+}
+
+.title {
+  margin-top: 20px;
+  font-weight: bolder;
+  font-size: 2rem;
+}
+
+.created {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  font-size: 1rem;
+  color: rgb(193, 193, 193);
+}
+
+.address {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  font-size: 1rem;
+  color: rgb(200, 200, 200);
+}
+
+.title {
+  text-align: center;
+  position: relative;
+  top: 50px;
+}
+
+.price {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  font-size: 1.2rem;
+  color: darkgreen;
+}

@@ -13,4 +13,12 @@ export class ProductService {
   getProducts(){
     return this.http.get<Product[]>(environment.url + "product/items");
   }
+
+  getProduct(id: number){
+    return this.http.get<Product>(environment.url + "product/item/" + id);
+  }
+
+  getProductOfCategory(id :number){
+    return this.http.get<Product[]>(environment.url + "product/items/category/" + id);
+  }
 }

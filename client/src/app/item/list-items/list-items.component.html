@@ -1,1 +1,19 @@
-<p>list-items works!</p>
+<a
+  [routerLink]="['/item', product.productId]"
+  routerLinkActive="router-link-active"
+>
+  <div class="product-img">
+    <img src="../../assets/Images/no-image.jpg" alt="no photo" />
+  </div>
+  <div class="product-details">
+    <h3>{{ product.name }}</h3>
+    <p class="product-owner">{{ product.owner }}</p>
+    <p class="product-description">
+      {{ product.description.substring(0, 100) }}...
+    </p>
+    <p class="product-price">{{ product.price }}&euro;</p>
+    <p class="product-addresse">
+      {{ product.address }} <fa-icon [icon]="mapMarker"></fa-icon>
+    </p>
+  </div>
+</a>

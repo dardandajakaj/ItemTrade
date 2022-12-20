@@ -6,34 +6,32 @@
         <input type="checkbox" id="Categories" checked />
         <div class="category-section">
           <div *ngFor="let category of categories" class="input-category">
-            <input
-              type="checkbox"
-              name="{{ category.name }}"
-              id="{{ category.name }}"
-            />{{ category.name }}
+            <a class="category" [routerLink]="['/category', category.categoryId]"
+            routerLinkActive="router-link-active" >{{category.name}}</a>
           </div>
         </div>
         <hr />
-        <label for="Price"><span>Price</span></label>
+        <label for="price"><span>Price</span></label>
         <ngx-slider
+          formControlName="price"
           [(value)]="minValue"
           [(highValue)]="maxValue"
           [options]="options"
         ></ngx-slider>
         <hr />
-        <label for="PriceSort"><span>Sort By Price</span></label>
-        <input type="radio" name="PriceSort" id="Cheapest" /><span
+        <label for="priceSort"><span>Sort By Price</span></label>
+        <input type="radio" name="priceSort" id="Cheapest" /><span
           >Cheapest</span
         ><br />
-        <input type="radio" name="PriceSort" id="Expensive" /><span
+        <input type="radio" name="priceSort" id="Expensive" /><span
           >Most Expensive</span
         >
         <hr />
-        <label for="Date"><span>Sort By Date</span></label>
-        <input type="radio" name="Date" id="Newest" value="1" /><span
+        <label for="date"><span>Sort By Date</span></label>
+        <input type="radio" name="date" id="Newest" value="1" /><span
           >Newest</span
         ><br />
-        <input type="radio" name="Date" id="Oldest" value="2" /><span
+        <input type="radio" name="date" id="Oldest" value="2" /><span
           >Oldest</span
         >
         <hr />
@@ -42,20 +40,8 @@
     <div class="col-md-10">
       <div class="categories">
         <div class="row">
-          <div
-            *ngFor="let product of products"
-            class="product"
-            (click)="navigateTo(product.productId)"
-          >
-            <div class="product-img">
-              <img src="../../assets/Images/no-image.jpg" alt="no photo" />
-            </div>
-            <div class="product-details">
-              <h3>{{ product.name }}</h3>
-              <p>{{ product.owner }}</p>
-              <p>{{ product.description }}</p>
-              <p>{{ product.price }}&euro;</p>
-            </div>
+          <div *ngFor="let product of products" class="product">
+            <app-item-card [product]="product"></app-item-card>
           </div>
         </div>
       </div>

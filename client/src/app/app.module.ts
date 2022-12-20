@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavComponent } from './nav/nav.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { NotFoundErrorComponent } from './errors/not-found-error/not-found-error.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
@@ -20,6 +20,8 @@ import { CategoryComponent } from './category/category.component';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home/home.component';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ItemCardComponent } from './item/item-card/item-card.component';
 
 
 
@@ -36,10 +38,12 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     EditProfileComponent,
     ShowItemComponent,
     CategoryComponent,
-    HomeComponent
+    HomeComponent,
+    ItemCardComponent
   ],
   imports: [
     ModalModule.forRoot(),
+    FontAwesomeModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -47,7 +51,9 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     NgbModule,
     FormsModule,
     CommonModule,
-    NgxSliderModule
+    NgxSliderModule,
+    FontAwesomeModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

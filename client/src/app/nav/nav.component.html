@@ -1,80 +1,171 @@
-    <div id="site-nav">
-        <div class="web-container">
-            <div id="site-logo-header">
-                <img src="#" alt="Logo Here"><br>
-                <span>Logo Moto Here</span>
-            </div>
-            <nav class="navbar navbar-expand-lg justify-content-between">
-                <form class="form-inline" (ngSubmit)="search()" #form="ngForm">
-
-                    <div class="row">
-                        <div class="col">
-                          <input [(ngModel)]="item.name" type="text" class="form-control" name="item" placeholder="Item...">
-                        </div>
-                        <div class="col">
-                          <input [(ngModel)]="item.category" type="text" class="form-control" name="category" placeholder="Category... ">
-                        </div>
-                        <div class="col">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </div>
-                      </div>
-                </form>
-                <!--Signin SECTION-->
-                <div id="site-signing">
-                  <div class="row">
-
-                    <!--singing Button and Form-->
-                    <div class="col">
-                      <button type="button" class="btn btn-outline-success" (click)="openSigninForm(SigninForm)" *ngIf="(accountService.currentUser$ | async) === null">Sign In</button>
-                      <ng-template #SigninForm>
-                        <div class="modal-header">
-                          <h4 class="modal-title pull-left">Sign in</h4>
-                          <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-                            <span aria-hidden="true" class="visually-hidden">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <form (ngSubmit)="onSignUp()" #form="ngForm" autocomplete="off">
-                            <input autocomplete="false" name="hidden" type="text" style="display:none;">
-                            <label for="username">Username</label>
-                            <input [(ngModel)]="model.username" type="text" name="username" id="username" class="form-control">
-                            <label for="password">Password</label>
-                            <input [(ngModel)]="model.password" type="password" name="password" id="password" class="form-control">
-                            <label for="password2">Confirm Password</label>
-                            <input [(ngModel)]="model.password2" type="password" name="password2" id="password2" class="form-control">
-                            <button type="submit" class="btn btn-outline-success">Signup</button>
-                          </form>
-                        </div>
-                      </ng-template>
-                    </div>
-
-                    <!--login button and Form-->
-                    <div class="col">
-                      <button type="button" class="btn btn-outline-success" (click)="openLoginForm(LoginForm)" *ngIf="(accountService.currentUser$ | async) === null">Log In</button>
-                      <ng-template #LoginForm>
-                        <div class="modal-header">
-                          <h4 class="modal-title pull-left">Log in</h4>
-                          <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
-                            <span aria-hidden="true" class="visually-hidden">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <form autocomplete="off" (ngSubmit)="onLogin()" #form="ngForm">
-                            <input [autocomplete]="false" name="hidden" type="text" style="display:none;">
-                            <label for="username">Username</label>
-                            <input [(ngModel)]="model.username" type="text" name="username" class="form-control">
-                            <label for="password">Password</label>
-                            <input [(ngModel)]="model.password"  type="password" name="password" class="form-control" >
-                            <button type="submit" class="btn btn-outline-success" >Log in</button>
-                          </form>
-                        </div>
-                      </ng-template>
-                    </div>
-                    <div class="col">
-                      <button type="submit" class="btn btn-outline-success" (click)="onLogout()" *ngIf="(accountService.currentUser$ |async)">Logout</button>
-                    </div>
-                  </div>
-                </div>
-            </nav>
+<div id="site-nav">
+  <div class="web-container">
+    <a [routerLink]="['/']" routerLinkActive="router-link-active">
+      <div id="site-logo-header" route>
+        <img src="#" alt="Logo Here" /><br />
+        <span>Logo Moto Here</span>
+      </div>
+    </a>
+    <nav class="navbar navbar-expand-lg justify-content-between">
+      <form class="form-inline" (ngSubmit)="search()" #form="ngForm">
+        <div class="row">
+          <div class="col">
+            <input
+              [(ngModel)]="item.name"
+              type="text"
+              class="form-control"
+              name="item"
+              placeholder="Item..."
+            />
+          </div>
+          <div class="col">
+            <input
+              [(ngModel)]="item.category"
+              type="text"
+              class="form-control"
+              name="category"
+              placeholder="Category... "
+            />
+          </div>
+          <div class="col">
+            <button class="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </div>
         </div>
-    </div>
+      </form>
+      <!--Signin SECTION-->
+      <div id="site-signing">
+        <div class="row">
+          <!--singing Button and Form-->
+          <div class="col">
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              (click)="openSigninForm(SigninForm)"
+              *ngIf="(accountService.currentUser$ | async) === null"
+            >
+              Sign In
+            </button>
+            <ng-template #SigninForm>
+              <div class="modal-header">
+                <h4 class="modal-title pull-left">Sign in</h4>
+                <button
+                  type="button"
+                  class="btn-close close pull-right"
+                  aria-label="Close"
+                  (click)="modalRef?.hide()"
+                >
+                  <span aria-hidden="true" class="visually-hidden"
+                    >&times;</span
+                  >
+                </button>
+              </div>
+              <div class="modal-body">
+                <form (ngSubmit)="onSignUp()" #form="ngForm" autocomplete="off">
+                  <input
+                    autocomplete="false"
+                    name="hidden"
+                    type="text"
+                    style="display: none"
+                  />
+                  <label for="username">Username</label>
+                  <input
+                    [(ngModel)]="model.username"
+                    type="text"
+                    name="username"
+                    id="username"
+                    class="form-control"
+                  />
+                  <label for="password">Password</label>
+                  <input
+                    [(ngModel)]="model.password"
+                    type="password"
+                    name="password"
+                    id="password"
+                    class="form-control"
+                  />
+                  <label for="password2">Confirm Password</label>
+                  <input
+                    [(ngModel)]="model.password2"
+                    type="password"
+                    name="password2"
+                    id="password2"
+                    class="form-control"
+                  />
+                  <button type="submit" class="btn btn-outline-success">
+                    Signup
+                  </button>
+                </form>
+              </div>
+            </ng-template>
+          </div>
+
+          <!--login button and Form-->
+          <div class="col">
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              (click)="openLoginForm(LoginForm)"
+              *ngIf="(accountService.currentUser$ | async) === null"
+            >
+              Log In
+            </button>
+            <ng-template #LoginForm>
+              <div class="modal-header">
+                <h4 class="modal-title pull-left">Log in</h4>
+                <button
+                  type="button"
+                  class="btn-close close pull-right"
+                  aria-label="Close"
+                  (click)="modalRef?.hide()"
+                >
+                  <span aria-hidden="true" class="visually-hidden"
+                    >&times;</span
+                  >
+                </button>
+              </div>
+              <div class="modal-body">
+                <form autocomplete="off" (ngSubmit)="onLogin()" #form="ngForm">
+                  <input
+                    [autocomplete]="false"
+                    name="hidden"
+                    type="text"
+                    style="display: none"
+                  />
+                  <label for="username">Username</label>
+                  <input
+                    [(ngModel)]="model.username"
+                    type="text"
+                    name="username"
+                    class="form-control"
+                  />
+                  <label for="password">Password</label>
+                  <input
+                    [(ngModel)]="model.password"
+                    type="password"
+                    name="password"
+                    class="form-control"
+                  />
+                  <button type="submit" class="btn btn-outline-success">
+                    Log in
+                  </button>
+                </form>
+              </div>
+            </ng-template>
+          </div>
+          <div class="col">
+            <button
+              type="submit"
+              class="btn btn-outline-success"
+              (click)="onLogout()"
+              *ngIf="accountService.currentUser$ | async"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>

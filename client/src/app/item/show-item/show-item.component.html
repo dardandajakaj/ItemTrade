@@ -1,1 +1,43 @@
-<p>show-item works!</p>
+<div class="row product-showcase">
+  <div class="col-md-7">
+    <a id="back-link" (click)="goBack()">< Go back to Result...</a>
+    <a
+      *ngIf="product"
+      class="category-link"
+      (click)="goToCategory(product.categoryId)"
+      >Category: {{ product.categoryName }}</a
+    >
+    <div class="product-img">
+      <h2>Gallery</h2>
+      <img src="../../assets/Images/no-image.jpg" alt="No Image" />
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="owner-details">
+      <p *ngIf="product" class="product-date">
+        {{ product.insertedOn | date : "longDate" }}
+        <span class="product-address"
+          ><fa-icon [icon]="mapMarker"></fa-icon>{{ product.address }}</span
+        >
+      </p>
+      <h3 *ngIf="product" class="product-owner">{{ product.owner }}</h3>
+      <h2 *ngIf="product" class="product-name">{{ product.name }}</h2>
+      <p *ngIf="product" class="product-price">
+        <span>Price:</span> {{ product.price }} &euro;
+      </p>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="product-details">
+    <h3>Description</h3>
+    <p *ngIf="product" class="product-description">
+      {{ product.description }}
+    </p>
+  </div>
+</div>
+<hr />
+<h2>Suggested</h2>
+<div class="row suggestion-section" *ngFor="let productSuggestion of this.products">
+    <app-item-card [product]="productSuggestion"></app-item-card>
+</div>
