@@ -22,6 +22,7 @@ import { HomeComponent } from './home/home.component';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ItemCardComponent } from './item/item-card/item-card.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 
 
@@ -39,7 +40,8 @@ import { ItemCardComponent } from './item/item-card/item-card.component';
     ShowItemComponent,
     CategoryComponent,
     HomeComponent,
-    ItemCardComponent
+    ItemCardComponent,
+    SidebarComponent
   ],
   imports: [
     ModalModule.forRoot(),

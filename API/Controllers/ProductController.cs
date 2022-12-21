@@ -1,7 +1,9 @@
 using API.Data;
 using API.Dto;
 using API.Entity;
+using API.Helpers;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,12 +25,15 @@ namespace API.Controllers
         //Later, Pagination should be added
         [HttpGet("items")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> listProducts(){
-            var products = await _context.Products
+        public async Task<ActionResult<IEnumerable<ProductDto>>> listProducts([FromQuery]PageParams productParams){
+            var products =  _context.Products
                                 .Include(u => u.User)
                                 .Include(c => c.Category)
-                                .ToListAsync();
-            return Ok(_mapper.Map<IEnumerable<ProductDto>>(products));
+                                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+                                .AsNoTracking();
+                                
+            return await PagedList<ProductDto>.CreateAsync((products), productParams.PageNumber, productParams.ItemsPerPage);
+            //return Ok(_mapper.Map<IEnumerable<ProductDto>>(products));
             // return await (from product in _context.Set<Product>()
             //                 join user in _context.Set<User>()
             //                 on product.InsertedBy equals user.Id
@@ -48,14 +53,14 @@ namespace API.Controllers
         //Later, Pagination to be added
         [HttpGet("item/search/{searchTerm}")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> getProductByName(String searchTerm){
+        public async Task<ActionResult<IEnumerable<ProductDto>>> getProductByName(String searchTerm, [FromQuery]PageParams productParams){
             //need autoMapper to Dto
-            var productList = await _context.Products
+            var productList = _context.Products
                                 .Include( u => u.User)            
                                 .Include(c => c.Category)
                                 .Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()))
-                                .ToListAsync();
-            return Ok(_mapper.Map<IEnumerable<ProductDto>>(productList));
+                                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider).AsNoTracking();
+            return await PagedList<ProductDto>.CreateAsync(productList, productParams.PageNumber, productParams.ItemsPerPage);
             // return await (from product in _context.Set<Product>().Where(item => item.Name.ToLower().Contains(searchTerm.ToLower()))
             //                 join user in _context.Set<User>()
             //                 on product.InsertedBy equals user.Id
@@ -77,12 +82,12 @@ namespace API.Controllers
         //Later, PAgination should be added
         [HttpGet("items/category/{categoryId}")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> getProductByCategory(int categoryId){
-            var products = await _context.Products
+        public async Task<ActionResult<IEnumerable<ProductDto>>> getProductByCategory(int categoryId, [FromQuery]PageParams productParams){
+            var products = _context.Products
                                 .Include(u => u.User)
                                 .Include(c => c.Category)
-                                .Where(p => p.CategoryId == categoryId).ToListAsync();
-            return Ok(_mapper.Map<IEnumerable<ProductDto>>(products));
+                                .Where(p => p.CategoryId == categoryId).ProjectTo<ProductDto>(_mapper.ConfigurationProvider).AsNoTracking();
+            return await PagedList<ProductDto>.CreateAsync(products, productParams.PageNumber, productParams.ItemsPerPage);
             // return await (from product in _context.Set<Product>().Where( item => item.CategoryId == categoryId)
             //               join user in _context.Set<User>()
             //               on product.InsertedBy equals user.Id
@@ -104,7 +109,7 @@ namespace API.Controllers
         //Pagination should be added if neccessary
         [HttpGet("items/favorite/{id}")] //could be http post method later
         [Authorize]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> getFavoriteProducts(int userId){
+        public async Task<ActionResult<IEnumerable<ProductDto>>> getFavoriteProducts(int userId, [FromQuery]PageParams productParams){
          
             // var products = await (from item in _context.Set<UserFavorites>().Where(i => i.UserId == userId)
             //                join product in _context.Set<Product>()
@@ -123,14 +128,14 @@ namespace API.Controllers
             //                 OnSale = product.IsSale
             //                }
             // ).ToListAsync();                 
-            var products = await _context.UserFavorites
+            var products = _context.UserFavorites
                                         .Include(p => p.Product)
                                         .Include(u => u.User)
                                         .Include(c => c.Product.Category)
                                         .Where(x => x.UserId == userId)
-                                        .ToListAsync();                    
+                                        .ProjectTo<ProductDto>(_mapper.ConfigurationProvider).AsNoTracking();                  
 
-            return Ok(_mapper.Map<IEnumerable<ProductDto>>(products));
+            return await PagedList<ProductDto>.CreateAsync(products,productParams.PageNumber, productParams.ItemsPerPage);
         }
 
         //Add item to products
@@ -213,12 +218,14 @@ namespace API.Controllers
         }
 
         [HttpGet("GetItemOfUser "),AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> listUserItems(int userId){
-            var products = await _context.Products
+        public async Task<ActionResult<IEnumerable<ProductDto>>> listUserItems(int userId,[FromQuery]PageParams productParams){
+            var products = _context.Products
                                 .Include(u => u.User)
                                 .Include(c => c.Category)
-                                .Where(p => p.InsertedBy == userId).ToListAsync();
-            return Ok(_mapper.Map<IEnumerable<ProductDto>>(products));
+                                .Where(p => p.InsertedBy == userId)
+                                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider).AsNoTracking();
+
+            return await PagedList<ProductDto>.CreateAsync(products, productParams.PageNumber,productParams.ItemsPerPage);
             // return await (from product in _context.Set<Product>()
             //                 join user in _context.Set<User>()
             //                 on product.InsertedBy equals user.Id

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using API.Dto;
 using API.Interfaces;
+using AutoMapper.QueryableExtensions;
+using API.Helpers;
 
 namespace API.Controllers
 {
@@ -23,13 +25,15 @@ namespace API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(){
-            var users = await _context.Users.ToListAsync();
-            var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
-            for(int i = 0; i < users.Count; i++){
-                userDtos.ElementAt(i).Token = _tokenService.CreateToken(users[i]); 
-            }
-            return Ok(userDtos);
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers([FromQuery]PageParams userParams){
+            // var users = await _context.Users.ToListAsync();
+            // var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
+            // for(int i = 0; i < users.Count; i++){
+            //     userDtos.ElementAt(i).Token = _tokenService.CreateToken(users[i]); 
+            // }
+            // return Ok(userDtos);
+            var users = _context.Users.ProjectTo<UserDto>(_mapper.ConfigurationProvider).AsNoTracking();
+            return await PagedList<UserDto>.CreateAsync(users, userParams.PageNumber, userParams.ItemsPerPage);
         }
 
         [HttpGet("{id}")]

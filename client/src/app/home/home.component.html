@@ -1,41 +1,7 @@
 <div class="content-container">
   <div class="row">
     <div class="col-md-2">
-      <div id="sidebar">
-        <label for="Categories"><span>Categories</span></label>
-        <input type="checkbox" id="Categories" checked />
-        <div class="category-section">
-          <div *ngFor="let category of categories" class="input-category">
-            <a class="category" [routerLink]="['/category', category.categoryId]"
-            routerLinkActive="router-link-active" >{{category.name}}</a>
-          </div>
-        </div>
-        <hr />
-        <label for="price"><span>Price</span></label>
-        <ngx-slider
-          formControlName="price"
-          [(value)]="minValue"
-          [(highValue)]="maxValue"
-          [options]="options"
-        ></ngx-slider>
-        <hr />
-        <label for="priceSort"><span>Sort By Price</span></label>
-        <input type="radio" name="priceSort" id="Cheapest" /><span
-          >Cheapest</span
-        ><br />
-        <input type="radio" name="priceSort" id="Expensive" /><span
-          >Most Expensive</span
-        >
-        <hr />
-        <label for="date"><span>Sort By Date</span></label>
-        <input type="radio" name="date" id="Newest" value="1" /><span
-          >Newest</span
-        ><br />
-        <input type="radio" name="date" id="Oldest" value="2" /><span
-          >Oldest</span
-        >
-        <hr />
-      </div>
+      <app-sidebar [categories]="categories"></app-sidebar>
     </div>
     <div class="col-md-10">
       <div class="categories">

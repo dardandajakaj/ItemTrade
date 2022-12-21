@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Category } from '../_Models/Category';
-import { LabelType, Options } from '@angular-slider/ngx-slider';
 import { CategoryService } from '../_Services/category.service';
 import { ProductService } from '../_Services/product.service';
 import { Product } from '../_Models/Product';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { FormControl, FormGroup } from '@angular/forms';
-import { waitForAsync } from '@angular/core/testing';
 
 @Component({
   selector: 'app-home',
@@ -15,22 +13,7 @@ import { waitForAsync } from '@angular/core/testing';
 })
 export class HomeComponent implements OnInit {
   mapMarker = faMapMarkerAlt;
-  minValue: number = 1;
-  maxValue: number = 2000;
-  options: Options = {
-    floor: 0,
-    ceil: 2000,
-    translate: (value: number, label: LabelType): string => {
-      switch (label) {
-        case LabelType.Low:
-          return "Min price:$" + value;
-        case LabelType.High:
-          return "Max price:$" + value;
-        default:
-          return "$" + value;
-      }
-    }
-  };
+
   public categories: Category[];
   public products: Product[];
   constructor(private categoryService: CategoryService, private productService: ProductService) { }
