@@ -4,18 +4,20 @@ import { CategoryService } from '../_Services/category.service';
 import { ProductService } from '../_Services/product.service';
 import { Product } from '../_Models/Product';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Pagination } from '../_Models/Pagination';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
   mapMarker = faMapMarkerAlt;
-
   public categories: Category[];
   public products: Product[];
+  pagination : Pagination;
+  pageNumber : number = 1;
+  itemsPerPage: number = 5;
   constructor(private categoryService: CategoryService, private productService: ProductService) { }
 
   ngOnInit(): void {
@@ -30,12 +32,18 @@ export class HomeComponent implements OnInit {
   }
 
   getProducts() {
-    this.productService.getProducts().subscribe(products => {
-      this.products = products;
+    this.productService.getProducts(this.pageNumber, this.itemsPerPage).subscribe(response => {
+      this.products = response.result;
+      this.pagination = response.pagination;
     })
   }
 
-  filter(){
-
+  pageChanged(event: any){
+    this.pageNumber = event.page;
+    this.getProducts();
+    window.scroll({
+      top:0,
+      left: 0
+    })
   }
 }

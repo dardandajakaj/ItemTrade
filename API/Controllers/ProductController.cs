@@ -1,6 +1,7 @@
 using API.Data;
 using API.Dto;
 using API.Entity;
+using API.Extensions;
 using API.Helpers;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -32,7 +33,9 @@ namespace API.Controllers
                                 .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
                                 .AsNoTracking();
                                 
-            return await PagedList<ProductDto>.CreateAsync((products), productParams.PageNumber, productParams.ItemsPerPage);
+            var result = await PagedList<ProductDto>.CreateAsync((products), productParams.PageNumber, productParams.ItemsPerPage);
+            Response.AddPaginationHeader(result.TotalItems, result.ItemsPerPage, result.TotalPages, result.CurrentPage);
+            return Ok(result);
             //return Ok(_mapper.Map<IEnumerable<ProductDto>>(products));
             // return await (from product in _context.Set<Product>()
             //                 join user in _context.Set<User>()
@@ -60,7 +63,9 @@ namespace API.Controllers
                                 .Include(c => c.Category)
                                 .Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()))
                                 .ProjectTo<ProductDto>(_mapper.ConfigurationProvider).AsNoTracking();
-            return await PagedList<ProductDto>.CreateAsync(productList, productParams.PageNumber, productParams.ItemsPerPage);
+            var result = await PagedList<ProductDto>.CreateAsync(productList, productParams.PageNumber, productParams.ItemsPerPage);
+            Response.AddPaginationHeader(result.TotalItems, result.ItemsPerPage, result.TotalPages, result.CurrentPage);
+            return Ok(result);
             // return await (from product in _context.Set<Product>().Where(item => item.Name.ToLower().Contains(searchTerm.ToLower()))
             //                 join user in _context.Set<User>()
             //                 on product.InsertedBy equals user.Id
@@ -87,7 +92,9 @@ namespace API.Controllers
                                 .Include(u => u.User)
                                 .Include(c => c.Category)
                                 .Where(p => p.CategoryId == categoryId).ProjectTo<ProductDto>(_mapper.ConfigurationProvider).AsNoTracking();
-            return await PagedList<ProductDto>.CreateAsync(products, productParams.PageNumber, productParams.ItemsPerPage);
+            var result = await PagedList<ProductDto>.CreateAsync(products, productParams.PageNumber, productParams.ItemsPerPage);
+            Response.AddPaginationHeader(result.TotalItems, result.ItemsPerPage, result.TotalPages, result.CurrentPage);
+            return Ok(result);
             // return await (from product in _context.Set<Product>().Where( item => item.CategoryId == categoryId)
             //               join user in _context.Set<User>()
             //               on product.InsertedBy equals user.Id
@@ -135,7 +142,9 @@ namespace API.Controllers
                                         .Where(x => x.UserId == userId)
                                         .ProjectTo<ProductDto>(_mapper.ConfigurationProvider).AsNoTracking();                  
 
-            return await PagedList<ProductDto>.CreateAsync(products,productParams.PageNumber, productParams.ItemsPerPage);
+            var result = await PagedList<ProductDto>.CreateAsync(products,productParams.PageNumber, productParams.ItemsPerPage);
+            Response.AddPaginationHeader(result.TotalItems, result.ItemsPerPage, result.TotalPages, result.CurrentPage);
+            return Ok(result);
         }
 
         //Add item to products
@@ -225,7 +234,9 @@ namespace API.Controllers
                                 .Where(p => p.InsertedBy == userId)
                                 .ProjectTo<ProductDto>(_mapper.ConfigurationProvider).AsNoTracking();
 
-            return await PagedList<ProductDto>.CreateAsync(products, productParams.PageNumber,productParams.ItemsPerPage);
+            var result = await PagedList<ProductDto>.CreateAsync(products, productParams.PageNumber,productParams.ItemsPerPage);
+            Response.AddPaginationHeader(result.TotalItems, result.ItemsPerPage, result.TotalPages, result.CurrentPage);
+            return Ok(result);
             // return await (from product in _context.Set<Product>()
             //                 join user in _context.Set<User>()
             //                 on product.InsertedBy equals user.Id

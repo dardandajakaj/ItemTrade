@@ -9,6 +9,20 @@
           <div *ngFor="let product of products" class="product">
             <app-item-card [product]="product"></app-item-card>
           </div>
+          <div class="pagination">
+            <pagination *ngIf="pagination"
+              [boundaryLinks]="true"
+              (pageChanged)="pageChanged($event)"
+              [(ngModel)]="pagination.CurrentPage"
+              [totalItems]="pagination.TotalItems"
+              [itemsPerPage]="pagination.ItemsPerPage"
+              previousText="&lsaquo;"
+              nextText="&rsaquo;"
+              firstText="&laquo;"
+              lastText="&raquo;"
+            >
+            </pagination>
+          </div>
         </div>
       </div>
     </div>
