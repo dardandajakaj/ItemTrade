@@ -21,6 +21,7 @@ import { HomeComponent } from './home/home.component';
 import { ItemCardComponent } from './item/item-card/item-card.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SharedModule } from './_Modules/shared.module';
+import { LoginComponent } from './users/login/login.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { SharedModule } from './_Modules/shared.module';
     CategoryComponent,
     ItemCardComponent,
     SidebarComponent,
-    HomeComponent
+    HomeComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

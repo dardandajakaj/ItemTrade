@@ -8,6 +8,7 @@ import { ListItemsComponent } from './item/list-items/list-items.component';
 import { ShowItemComponent } from './item/show-item/show-item.component';
 import { CreateProfileComponent } from './users/create-profile/create-profile.component';
 import { EditProfileComponent } from './users/edit-profile/edit-profile.component';
+import { LoginComponent } from './users/login/login.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: 'edit-item/:id', component: EditItemComponent},
   {path: 'not-found', component: NotFoundErrorComponent},
   {path: 'server-error', component: ServerErrorComponent},
+  {path: 'login', component: LoginComponent},
   {path: '**', component: NotFoundErrorComponent, pathMatch: 'full'}
 ];
 
