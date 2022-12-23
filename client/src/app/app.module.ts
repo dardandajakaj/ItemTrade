@@ -4,7 +4,7 @@ import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { HttpClientModule} from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule, NgbPagination } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavComponent } from './nav/nav.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NotFoundErrorComponent } from './errors/not-found-error/not-found-error.component';
@@ -22,6 +22,7 @@ import { ItemCardComponent } from './item/item-card/item-card.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SharedModule } from './_Modules/shared.module';
 import { LoginComponent } from './users/login/login.component';
+import { TextInputComponent } from './_forms/text-input/text-input.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { LoginComponent } from './users/login/login.component';
     ItemCardComponent,
     SidebarComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    TextInputComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,6 +50,7 @@ import { LoginComponent } from './users/login/login.component';
     HttpClientModule,
     NgbModule,
     FormsModule,
+    ReactiveFormsModule,
     CommonModule,
     SharedModule,
   ],

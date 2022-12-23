@@ -21,9 +21,9 @@ namespace API.Dto
         [Required]
         public DateTime DateOfBirth { get; set; }
         [Required]
-        public int Role { get; set; }
+        public int Role { get; set; } = 1;
         [Required]
-        public int isActive { get; set; }
+        public int isActive { get; set; } = 1;
         [Required]
         public string Password { get; set; }
     }

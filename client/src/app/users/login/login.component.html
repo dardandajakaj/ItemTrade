@@ -1,53 +1,165 @@
-<div [ngClass]="active? 'right-panel-active': ''" class="container" id="container">
-	<div class="form-container sign-up-container">
-		<form action="#" id="signup">
-			<h1>Create Account</h1>
-			<div class="social-container">
-				<a href="#" class="social"><fa-icon [icon]="facebook"></fa-icon></a>
-				<a href="#" class="social"><fa-icon [icon]="google"></fa-icon></a>
-				<a href="#" class="social"><fa-icon [icon]="linkedin"></fa-icon></a>
-			</div>
-			<span>or use your email for registration</span>
-			<input type="text" name="fullname" placeholder="Fullname" />
-      <input type="text" name="username" placeholder="Username"/>
-			<input type="email" name="email" placeholder="Email" />
-      <input type="password" name="password" placeholder="Password" />
-      <input type="text" name="street" placeholder="Street" />
-      <input type="text" name="city" placeholder="City" />
-      <input type="text" name="state" placeholder="State" />
-      <input type="text" name="phone" placeholder="Phone" />
-      <input type="text" name="dob" placeholder="Date of Birth" onfocus="(this.type='date')"/>
-			<button (click)="signUp()">Sign Up</button>
-		</form>
-	</div>
-	<div class="form-container sign-in-container">
-		<form action="#" id="signin">
-			<h1>Sign in</h1>
-			<div class="social-container">
-				<a href="#" class="social"><fa-icon [icon]="facebook"></fa-icon></a>
-				<a href="#" class="social"><fa-icon [icon]="google"></fa-icon></a>
-				<a href="#" class="social"><fa-icon [icon]="linkedin"></fa-icon></a>
-			</div>
-			<span>or use your account</span>
-			<input type="email" placeholder="Email" />
-			<input type="password" placeholder="Password" />
-			<a href="#">Forgot your password?</a>
-			<button (click)="signIn()">Sign In</button>
-		</form>
-	</div>
-	<div class="overlay-container">
-		<div class="overlay">
-			<div  class="overlay-panel overlay-left">
-				<h1>Welcome Back!</h1>
-				<p>To keep connected with us please login with your personal info</p>
-				<button  class="ghost" id="signIn" (click)="toggleActive()">Sign In</button>
-			</div>
-			<div class="overlay-panel overlay-right">
-				<h1>Hello, Friend!</h1>
-				<p>Enter your personal details and start journey with us</p>
-				<button class="ghost" id="signUp" (click)="toggleActive()">Sign Up</button>
-			</div>
-		</div>
-	</div>
+<div
+  [ngClass]="active ? 'right-panel-active' : ''"
+  class="container"
+  id="container"
+>
+  <div class="form-container sign-up-container">
+    <form [formGroup]="signupForm" (ngSubmit)="signUp()" id="signup">
+      <h1>Create Account</h1>
+      <div class="social-container">
+        <a href="#" class="social"><fa-icon [icon]="facebook"></fa-icon></a>
+        <a href="#" class="social"><fa-icon [icon]="google"></fa-icon></a>
+        <a href="#" class="social"><fa-icon [icon]="linkedin"></fa-icon></a>
+      </div>
+      <span>or use your email for registration</span>
+      <input
+        formControlName="fullname"
+        type="text"
+        [class.invalid-input]="
+          this.signupForm.get('fullname').errors &&
+          this.signupForm.get('fullname').touched
+        "
+        name="fullname"
+        placeholder="Fullname"
+      />
+      <input
+        formControlName="username"
+        type="text"
+        [class.invalid-input]="
+          this.signupForm.get('username').errors &&
+          this.signupForm.get('username').touched
+        "
+        name="username"
+        placeholder="Username"
+      />
+      <input
+        formControlName="email"
+        type="email"
+        [class.invalid-input]="
+          this.signupForm.get('email').errors &&
+          this.signupForm.get('email').touched
+        "
+        name="email"
+        placeholder="Email"
+      />
+      <input
+        formControlName="password"
+        type="password"
+        [class.invalid-input]="
+          this.signupForm.get('password').errors &&
+          this.signupForm.get('password').touched
+        "
+        name="password"
+        placeholder="Password"
+      />
+      <input
+        formControlName="street"
+        type="text"
+        [class.invalid-input]="
+          this.signupForm.get('street').errors &&
+          this.signupForm.get('street').touched
+        "
+        name="street"
+        placeholder="Street"
+      />
+      <input
+        formControlName="city"
+        type="text"
+        [class.invalid-input]="
+          this.signupForm.get('city').errors &&
+          this.signupForm.get('city').touched
+        "
+        name="city"
+        placeholder="City"
+      />
+      <input
+        formControlName="state"
+        type="text"
+        [class.invalid-input]="
+          this.signupForm.get('state').errors &&
+          this.signupForm.get('state').touched
+        "
+        name="state"
+        placeholder="State"
+      />
+      <input
+        formControlName="phone"
+        type="text"
+        [class.invalid-input]="
+          this.signupForm.get('phone').errors &&
+          this.signupForm.get('phone').touched
+        "
+        name="phone"
+        placeholder="Phone"
+      />
+      <input
+        formControlName="dob"
+        type="text"
+        [class.invalid-input]="
+          this.signupForm.get('dob').errors &&
+          this.signupForm.get('dob').touched
+        "
+        name="dob"
+        placeholder="Date of Birth"
+        onfocus="(this.type='date')"
+      />
+      <button type="submit">Sign Up</button>
+    </form>
+  </div>
+  <div class="form-container sign-in-container">
+    <form [formGroup]="signinForm" (ngSubmit)="signIn()" id="signin">
+      <h1>Sign in</h1>
+      <div class="social-container">
+        <a href="#" class="social"><fa-icon [icon]="facebook"></fa-icon></a>
+        <a href="#" class="social"><fa-icon [icon]="google"></fa-icon></a>
+        <a href="#" class="social"><fa-icon [icon]="linkedin"></fa-icon></a>
+      </div>
+      <span>or use your account</span>
+      <input
+        formControlName="email"
+        type="email"
+        [class.invalid-input]="
+          this.signupForm.get('email').errors &&
+          this.signupForm.get('email').touched
+        "
+        name="email"
+        placeholder="Email"
+      />
+      <input
+        formControlName="password"
+        type="password"
+        [class.invalid-input]="
+          this.signupForm.get('password').errors &&
+          this.signupForm.get('password').touched
+        "
+        name="password"
+        placeholder="Password"
+      />
+      <a href="#">Forgot your password?</a>
+      <button type="submit">Sign In</button>
+    </form>
+  </div>
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-left">
+        <h1>Welcome Back!</h1>
+        <p>To keep connected with us please login with your personal info</p>
+        <button class="ghost" id="signIn" (click)="toggleActive()">
+          Sign In
+        </button>
+      </div>
+      <div class="overlay-panel overlay-right">
+        <h1>Hello, Friend!</h1>
+        <p>Enter your personal details and start journey with us</p>
+        <button class="ghost" id="signUp" (click)="toggleActive()">
+          Sign Up
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
-
+<!--
+<div>
+  <p>{{ this.signupForm.value | json }}</p>
+  <p>{{ this.signupForm.status | json }}</p>
+</div> -->

@@ -134,8 +134,8 @@ input[name=dob]{
   margin-top: 2.5em;
 	background-color: #fff;
 	border-radius: 10px;
-  	box-shadow: 0 14px 28px rgba(0,0,0,0.25),
-			0 10px 10px rgba(0,0,0,0.22);
+  	/* box-shadow: 0 14px 28px rgba(0,0,0,0.25),
+			0 10px 10px rgba(0,0,0,0.22); */
 	position: relative;
 	overflow: hidden;
   height: 620px;
@@ -253,10 +253,6 @@ input[name=dob]{
 	transform: translateX(20%);
 }
 
-/* .social-container {
-	margin: 20px 0;
-} */
-
 .social-container a {
 	border: 1px solid #DDDDDD;
 	border-radius: 50%;
@@ -268,27 +264,7 @@ input[name=dob]{
 	width: 40px;
 }
 
-footer {
-    background-color: #222;
-    color: #fff;
-    font-size: 14px;
-    bottom: 0;
-    position: fixed;
-    left: 0;
-    right: 0;
-    text-align: center;
-    z-index: 999;
-}
-
-footer p {
-    margin: 10px 0;
-}
-
-footer i {
-    color: red;
-}
-
-footer a {
-    color: #3c97bf;
-    text-decoration: none;
+.invalid-input{
+  border: 2px solid red;
+  border-radius: 5px;
 }

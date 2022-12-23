@@ -39,7 +39,7 @@
         <div class="row">
           <!--signin/signup button and Form-->
           <div class="col">
-            <a class="btn btn-success" routerLink="/login" routerLinkActive="router-link-active">Sign In/Up </a>
+            <a *ngIf="!(accountService.currentUser$ |async)" class="btn btn-success" routerLink="/login" routerLinkActive="router-link-active">Sign In/Up </a>
           </div>
           <div class="col">
             <button

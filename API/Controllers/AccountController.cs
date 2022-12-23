@@ -55,7 +55,7 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto){
 
-            var user = await _context.Users.SingleOrDefaultAsync<User>(x => x.UserName.ToLower() == loginDto.Username.ToLower());
+            var user = await _context.Users.SingleOrDefaultAsync<User>(x => x.Email.ToLower() == loginDto.Email.ToLower());
 
             if(user == null) return BadRequest("No User found!");
 

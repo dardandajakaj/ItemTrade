@@ -1,0 +1,13 @@
+<input
+  [class.invalid-input]="this.ngControl.touched && this.ngControl.invalid"
+  type="{{ type }}"
+  [formControl]="$any(ngControl.control)"
+  name="fullname"
+  placeholder="{{ label }}"
+/>
+<div
+  *ngIf="ngControl.control.hasError('required') && ngControl.control.touched"
+  class="text-danger"
+>
+  Please enter your {{ label }}
+</div>
