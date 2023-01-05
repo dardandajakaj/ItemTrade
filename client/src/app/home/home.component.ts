@@ -24,6 +24,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCategories();
+    this.router.params.subscribe(response => {
+      this.getProducts(response['id'])
+    })
     this.getProducts();
   }
 
@@ -33,18 +36,9 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  getProducts() {
-    let id: number;
-    let path: string;
+  getProducts(id?: number) {
 
-    this.router.url.subscribe(url => {
-      if (url.length > 0) {
-        id = Number.parseInt(url[1].path);
-        path = url[0].path;
-      }
-    })
-
-    if (id != undefined && path != undefined) {
+    if (id != undefined) {
       this.productService.getProductOfCategory(id, this.pageNumber, environment.itemsPerPage).subscribe(response => {
         this.products = response.result;
         this.pagination = response.pagination;
