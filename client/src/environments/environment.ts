@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  url: "https://localhost:7103/api/"
+  url: "https://localhost:7103/api/",
+  itemsPerPage: 5,
+  pageNumber: 1
 };
 
 /*

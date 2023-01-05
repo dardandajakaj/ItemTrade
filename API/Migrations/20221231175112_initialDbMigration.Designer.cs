@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221119162554_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20221231175112_initialDbMigration")]
+    partial class initialDbMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -184,13 +184,13 @@ namespace API.Migrations
                     b.HasOne("API.Entity.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("API.Entity.User", "User")
                         .WithMany("Products")
                         .HasForeignKey("InsertedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -201,15 +201,15 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entity.UserFavorites", b =>
                 {
                     b.HasOne("API.Entity.Product", "Product")
-                        .WithMany()
+                        .WithMany("UserFavorites")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("API.Entity.User", "User")
-                        .WithMany()
+                        .WithMany("UserFavorites")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Product");
@@ -222,9 +222,16 @@ namespace API.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("API.Entity.Product", b =>
+                {
+                    b.Navigation("UserFavorites");
+                });
+
             modelBuilder.Entity("API.Entity.User", b =>
                 {
                     b.Navigation("Products");
+
+                    b.Navigation("UserFavorites");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,23 @@
+<h1>My Items</h1>
+<div
+  class="product"
+  *ngFor="let product of products"
+  style="text-align: center; margin-top: 20px"
+>
+  <div class="product-details">
+    <app-item-card [product]="product"></app-item-card>
+  </div>
+  <div class="product-interaction">
+    <a
+      [routerLink]="['/edit-item', product.productId]"
+      routerLinkActive="router-link-active"
+      class="btn btn-primary"
+      >Edit</a
+    >
+    <a
+      (click)="deleteProduct(product.productId)"
+      class="btn btn-danger"
+      >Delete</a
+    >
+  </div>
+</div>

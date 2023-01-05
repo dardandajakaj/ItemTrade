@@ -1,4 +1,4 @@
-export interface RegisterDto{
+export interface RegisterUserDto{
   fullname: string;
   username: string;
   email: string;

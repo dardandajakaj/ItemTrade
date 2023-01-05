@@ -14,7 +14,7 @@ namespace API.Helpers
                     .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.User.Street + ", " + src.User.City + ' ' + src.User.State))
                     .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
            CreateMap<User, UserDto>();
-                    //.ForMember(dest => dest.Token, opt => opt.MapFrom());
+           CreateMap<UpdateProductDto, Product>();
 
         }
     }

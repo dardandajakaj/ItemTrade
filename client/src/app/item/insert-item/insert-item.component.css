@@ -1,0 +1,47 @@
+h1{
+  text-align: center;
+}
+.formProduct{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.form-container{
+  width: 60%;
+}
+#photo-container{
+  width: 40%;
+}
+#photo-container>img{
+  padding: 10px;
+  width: 100%;
+  height: 100%;
+}
+.form-container *{
+  background-color: #eee;
+  border: none;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 100%;
+}
+
+.formProduct input[type="checkbox"]{
+  display: inline;
+  width: 50px;
+}
+
+.formProduct label{
+  display: inline;
+}
+
+button[type="submit"]{
+  border-radius: 20px;
+  border: 1px solid #116b28;
+  background-color: #116b28;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  margin: auto;
+}

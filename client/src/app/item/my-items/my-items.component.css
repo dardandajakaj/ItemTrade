@@ -1,0 +1,22 @@
+.product{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: 100%;
+}
+
+.product-details{
+  width: 70%;
+}
+
+.product-interaction{
+  width: 30%;
+  margin: auto;
+}
+
+.product-interaction a{
+  width: 80%;
+  height: 50px;
+  font-size: 1.3rem;
+  margin-top: 10px;
+}

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faFacebookF, faGooglePlusG, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import { AccountService } from 'src/app/_Services/account-service.service';
-import { RegisterDto } from '../../_Models/RegisterDto';
+import { RegisterUserDto } from '../../_Models/RegisterUserDto';
 
 @Component({
   selector: 'app-login',

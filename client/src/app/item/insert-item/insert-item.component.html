@@ -1,1 +1,28 @@
-<p>insert-item works!</p>
+<h1>{{ label }} your item</h1>
+<div class="product-form">
+    <form class="formProduct" [formGroup]="productForm" (ngSubmit)="saveItem()">
+    <div id="photo-container">
+      <img src="../../../assets/Images/no-image.jpg" alt="" srcset="" />
+    </div>
+    <div class="form-container">
+      <input type="hidden" formcontrolname="id">
+      <input type="text" formControlName="name" placeholder="Product name...">
+      <textarea formControlName="description" rows="10" placeholder="Product Description..."></textarea>
+      <select formControlName="category">
+        <option [ngValue]="null" disabled selected>Pick a category</option>
+        <option
+          *ngFor="let category of categories"
+          [ngValue]="category.categoryId"
+        >
+          {{ category.name }}
+        </option>
+      </select>
+      <input type="text" formControlName="price" placeholder="Product Price..." (keydown)="checkInput($event)">
+      <div class="isSale">
+        <label for="isSale">Is Sale:</label>
+        <input type="checkbox" formControlName="isSale">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-success">Save Product</button>
+  </form>
+</div>

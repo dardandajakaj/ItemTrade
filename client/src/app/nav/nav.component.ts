@@ -1,7 +1,8 @@
 import { Component, OnInit, TemplateRef} from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { RegisterDto } from '../_Models/RegisterDto';
+import { RegisterUserDto } from '../_Models/RegisterUserDto';
 import { AccountService } from '../_Services/account-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -12,16 +13,10 @@ export class NavComponent implements OnInit {
   modalRef?: BsModalRef;
   item: any = {};
   model: any = {};
-  constructor(private modalService: BsModalService, public accountService: AccountService) {}
+  constructor(private modalService: BsModalService, public accountService: AccountService, private router : Router) {}
 
   ngOnInit(): void {
   }
-
-  // getCurrentUser(){
-  //   this.accountService.currentUser$.subscribe(user => {
-
-  //   })
-  // }
 
   search(){
     console.log(this.item)
@@ -50,7 +45,7 @@ export class NavComponent implements OnInit {
     if(this.model.password != this.model.password2){
       console.log("Password do not match!")
     }else{
-      const user = {} as RegisterDto;
+      const user = {} as RegisterUserDto;
       user.username = this.model.username;
       user.password = this.model.password;
       this.accountService.signup(user).subscribe({
@@ -66,5 +61,6 @@ export class NavComponent implements OnInit {
 
   onLogout(){
     this.accountService.logout();
+    this.router.navigateByUrl('/login')
   }
 }

@@ -19,6 +19,8 @@ namespace API.Data
         protected override void OnModelCreating(ModelBuilder builder){
             builder.Entity<User>().HasMany(u => u.Products).WithOne(p => p.User).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Product>().HasOne(p => p.User).WithMany(u => u.Products).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Product>().HasOne(p => p.Category).WithMany(c => c.Products).OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Category>().HasMany(c => c.Products).WithOne(p => p.Category).OnDelete(DeleteBehavior.NoAction);
             builder.Entity<UserFavorites>().HasOne(uf => uf.User).WithMany(u => u.UserFavorites).OnDelete(DeleteBehavior.NoAction);
             builder.Entity<UserFavorites>().HasOne(uf => uf.Product).WithMany(p => p.UserFavorites).OnDelete(DeleteBehavior.NoAction);
         }

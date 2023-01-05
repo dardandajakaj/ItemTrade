@@ -10,7 +10,8 @@
             <app-item-card [product]="product"></app-item-card>
           </div>
           <div class="pagination">
-            <pagination *ngIf="pagination"
+            <pagination
+              *ngIf="pagination"
               [boundaryLinks]="true"
               (pageChanged)="pageChanged($event)"
               [(ngModel)]="pagination.CurrentPage"
@@ -22,6 +23,9 @@
               lastText="&raquo;"
             >
             </pagination>
+            <div class="itemsPerPage">
+              <input class="form-control" type="number" name="itemsPerPage" [(ngModel)]="itemsPerPage" (ngModelChange)="changeItemSize()"/>
+            </div>
           </div>
         </div>
       </div>

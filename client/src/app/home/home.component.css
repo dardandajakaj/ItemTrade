@@ -63,3 +63,8 @@
   color: rgb(145, 173, 140);;
 }
 
+.itemsPerPage{
+  display: block;
+  float: right;
+  width: 75px;
+}
