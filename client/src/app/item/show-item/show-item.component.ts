@@ -32,14 +32,6 @@ export class ShowItemComponent implements OnInit {
     this._location.back();
   }
 
-  loadProduct(id: number) {
-    // this.productService.getProduct(id).subscribe(product =>
-    //   {
-    //     this.product = product;
-    //   })
-    // this.loadProducts();
-  }
-
   loadProducts() {
     return this.productService.getProductOfCategory(this.product.categoryId).subscribe(products => {
       let i: number = 0;
