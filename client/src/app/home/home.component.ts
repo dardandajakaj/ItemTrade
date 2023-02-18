@@ -7,6 +7,10 @@ import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { Pagination } from '../_Models/Pagination';
 import { environment } from '../../environments/environment';
 import { ActivatedRoute } from '@angular/router';
+import { FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { Filter } from '../_Models/Filter';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
@@ -15,40 +19,35 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
   mapMarker = faMapMarkerAlt;
-  public categories: Category[];
+  public categories$: Observable<Category[]>;
   public products: Product[];
   pagination: Pagination;
   pageNumber: number = 1;
+  item: string;
   itemsPerPage: number = environment.itemsPerPage;
-  constructor(private categoryService: CategoryService, private productService: ProductService, public router: ActivatedRoute) { }
+  filters: Filter = {
+    name: '-1',
+    category: 0,
+    minPrice: 0,
+    maxPrice: 0,
+    sort: 0
+  }
+  constructor(private categoryService: CategoryService, private productService: ProductService, public router: ActivatedRoute, private toastR: ToastrService) { }
 
   ngOnInit(): void {
     this.getCategories();
-    this.router.params.subscribe(response => {
-      this.getProducts(response['id'])
-    })
     this.getProducts();
   }
 
   getCategories() {
-    this.categoryService.getCategories().subscribe(categories => {
-      this.categories = categories;
-    })
+    this.categories$ = this.categoryService.getCategories();
   }
 
-  getProducts(id?: number) {
-
-    if (id != undefined) {
-      this.productService.getProductOfCategory(id, this.pageNumber, environment.itemsPerPage).subscribe(response => {
-        this.products = response.result;
-        this.pagination = response.pagination;
-      })
-    } else {
-      this.productService.getProducts(this.pageNumber, environment.itemsPerPage).subscribe(response => {
-        this.products = response.result;
-        this.pagination = response.pagination;
-      })
-    }
+  getProducts() {
+      this.productService.getFilteredProducts(this.filters, this.pageNumber, environment.itemsPerPage).subscribe(response => {
+      this.products = response.result;
+      this.pagination = response.pagination;
+    })
   }
 
   pageChanged(event: any) {
@@ -65,5 +64,21 @@ export class HomeComponent implements OnInit {
     setTimeout(() => {
       this.ngOnInit()
     }, 1000);
+  }
+
+  filterChanged(filter: FormGroup) {
+    this.checkFilter(filter)
+    this.productService.getFilteredProducts(this.filters, this.pageNumber, environment.itemsPerPage).subscribe(response => {
+      this.products = response.result;
+      this.pagination = response.pagination;
+    })
+  }
+
+  checkFilter(filter: FormGroup) {
+    this.filters.name = (filter['name'] == '' || filter['name'] == null) ? "-1" : filter['name'];
+    this.filters.category = (filter['category'] == '' || filter['category'] == null) ? 0 : filter['category'];
+    this.filters.minPrice = (filter['minPrice'] == '' || filter['minPrice'] == null) ? 0 : filter['minPrice'];
+    this.filters.maxPrice = (filter['maxPrice'] == '' || filter['maxPrice'] == null) ? 0 : filter['maxPrice'];
+    this.filters.sort = (filter['sort'] == '' || filter['sort'] == null) ? 0 : filter['sort'];
   }
 }

@@ -1,5 +1,5 @@
 <div id="sidebar">
-  <label for="Categories"><span>Categories</span></label>
+  <!-- <label for="Categories"><span>Categories</span></label>
   <input type="checkbox" id="Categories" checked />
   <div class="category-section">
     <div *ngFor="let category of categories" class="input-category">
@@ -13,6 +13,7 @@
     [(value)]="minValue"
     [(highValue)]="maxValue"
     [options]="options"
+    (userChangeEnd)="priceRangeEvent()"
   ></ngx-slider>
   <hr />
   <label for="priceSort"><span>Sort By Price</span></label>
@@ -30,5 +31,72 @@
   <input type="radio" name="date" id="Oldest" value="2" /><span
     >Oldest</span
   >
-  <hr />
+  <hr /> -->
+  <ng-container>
+    <form [formGroup]="sideForm" (change)="searchEvent()">
+      <div class="section">
+        <label for="cheapest">Item:</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          name="name"
+        />
+      </div>
+      <label for="Categories"><span>Categories</span></label>
+      <input type="checkbox" id="Categories" checked />
+      <div class="category-section">
+        <div *ngFor="let category of categories">
+          <input
+          id="{{category.name}}"
+            type="radio"
+            value="{{ category.categoryId }}"
+            formControlName="category"
+            name="category"
+          ><label for="{{category.name}}">{{ category.name }}</label>
+        </div>
+      </div>
+      <div class="section">
+        <label for="minPrice"><span>Min: </span></label>
+        <input type="number" formControlName="minPrice" name="minPrice" min="0"/>
+        <label for="maxPrice"><span>Max: </span></label>
+        <input type="number" formControlName="maxPrice" name="maxPrice" min="1"/>
+      </div>
+      <div class="section">
+        <input
+          id="cheapest"
+          type="radio"
+          value="1"
+          formControlName="sort"
+          name="sort"
+        /><label for="cheapest">Cheapest</label>
+        <input
+          id="expensive"
+          type="radio"
+          value="2"
+          formControlName="sort"
+          name="sort"
+        /><label for="expensive">Most Expensive</label>
+      </div>
+      <div class="section">
+        <input
+          id="newest"
+          type="radio"
+          value="3"
+          formControlName="sort"
+          name="sort"
+        /><label for="newest">Newest</label>
+        <input
+          id="oldest"
+          type="radio"
+          value="4"
+          formControlName="sort"
+          name="sort"
+        /><label for="oldest">Oldest</label>
+      </div>
+      <div class="section">
+        <button type="button" (click)="resetFilter()">Reset Filters</button>
+      </div>
+    </form>
+  </ng-container>
 </div>

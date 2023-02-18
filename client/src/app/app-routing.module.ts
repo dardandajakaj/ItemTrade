@@ -9,21 +9,29 @@ import { EditProfileComponent } from './users/edit-profile/edit-profile.componen
 import { LoginComponent } from './users/login/login.component';
 import { MyItemsComponent } from './item/my-items/my-items.component';
 import { InsertItemComponent } from './item/insert-item/insert-item.component';
+import { AuthGuard } from './_guards/auth.guard';
 
 
 const routes: Routes = [
-  {path: '', component: HomeComponent},
-  {path: 'category/:id', component: HomeComponent},
-  {path: 'create-profile', component: CreateProfileComponent},
-  {path: 'edit-profile', component: EditProfileComponent},
-  {path: 'item/:id', component: ShowItemComponent},
-  {path: 'my-items', component: MyItemsComponent},
-  {path: 'edit-item/:id', component: InsertItemComponent},
-  {path: 'insert-item', component:InsertItemComponent},
-  {path: 'not-found', component: NotFoundErrorComponent},
-  {path: 'server-error', component: ServerErrorComponent},
-  {path: 'login', component: LoginComponent},
-  {path: '**', component: NotFoundErrorComponent, pathMatch: 'full'}
+  { path: '', component: HomeComponent },
+  {
+    path: '', runGuardsAndResolvers: 'always',
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'my-items', component: MyItemsComponent },
+      { path: 'edit-item/:id', component: InsertItemComponent },
+      { path: 'insert-item', component: InsertItemComponent },
+    ]
+  },
+  { path: 'category/:id', component: HomeComponent },
+  { path: 'create-profile', component: CreateProfileComponent },
+  { path: 'edit-profile', component: EditProfileComponent },
+  { path: 'item/:id', component: ShowItemComponent },
+
+  { path: 'not-found', component: NotFoundErrorComponent },
+  { path: 'server-error', component: ServerErrorComponent },
+  { path: 'login', component: LoginComponent },
+  { path: '**', component: NotFoundErrorComponent, pathMatch: 'full' }
 ];
 
 @NgModule({

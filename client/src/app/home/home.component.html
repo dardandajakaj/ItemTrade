@@ -1,7 +1,7 @@
 <div class="content-container">
   <div class="row">
     <div class="col-md-2">
-      <app-sidebar [categories]="categories"></app-sidebar>
+      <app-sidebar [categories]="categories$ | async" (searchEventEmitter)="filterChanged($event)"></app-sidebar>
     </div>
     <div class="col-md-10">
       <div class="categories">
@@ -9,7 +9,7 @@
           <div *ngFor="let product of products" class="product">
             <app-item-card [product]="product"></app-item-card>
           </div>
-          <div class="pagination">
+            <div class="pagination">
             <pagination
               *ngIf="pagination"
               [boundaryLinks]="true"

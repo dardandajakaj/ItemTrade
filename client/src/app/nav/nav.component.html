@@ -7,33 +7,13 @@
       </div>
     </a>
     <nav class="navbar navbar-expand-lg justify-content-between">
-      <form class="form-inline" (ngSubmit)="search()" #form="ngForm">
+
         <div class="row">
           <div class="col">
-            <input
-              [(ngModel)]="item.name"
-              type="text"
-              class="form-control"
-              name="item"
-              placeholder="Item..."
-            />
-          </div>
-          <div class="col">
-            <input
-              [(ngModel)]="item.category"
-              type="text"
-              class="form-control"
-              name="category"
-              placeholder="Category... "
-            />
-          </div>
-          <div class="col">
-            <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
+            <button id="homeBtn" class="btn btn-outline-success" (click)="goHome()">Home</button>
           </div>
         </div>
-      </form>
+
       <!--Signin SECTION-->
       <div id="site-signing">
         <div class="row">

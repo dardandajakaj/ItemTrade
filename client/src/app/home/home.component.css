@@ -68,3 +68,10 @@
   float: right;
   width: 75px;
 }
+
+.pagination{
+  justify-content: center;
+}
+.itemsPerPage>input{
+  text-align: center;
+}

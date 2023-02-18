@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faFacebookF, faGooglePlusG, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import { AccountService } from 'src/app/_Services/account-service.service';
-import { RegisterUserDto } from '../../_Models/RegisterUserDto';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   signupForm: FormGroup;
   signinForm: FormGroup;
 
-  constructor(private accountService: AccountService, public fb: FormBuilder, private location: Location) { }
+  constructor(private accountService: AccountService, public fb: FormBuilder, private location: Location, private toastR : ToastrService) { }
 
   ngOnInit(): void {
     this.FormInit();
@@ -49,20 +49,24 @@ export class LoginComponent implements OnInit {
   }
 
   signUp() {
-    console.log('signup')
-    if (this.signupForm.status === 'INVALID') return;
+    if (this.signupForm.status === 'INVALID'){
+      this.toastR.error(this.signupForm.status)
+      return;
+    }
     this.accountService.signup(this.signupForm.value).subscribe({
       next: (v) => this.location.back(),
-      error: (e) => console.error(e)
+      error: (e) => this.toastR.error(e.error)
     })
   }
 
   signIn() {
-    console.log('signin')
-    if (this.signinForm.status === "INVALID") return;
+    if (this.signinForm.status === "INVALID") {
+      this.toastR.error(this.signinForm.status)
+      return;
+    }
     this.accountService.login(this.signinForm.value).subscribe({
       next: (v) => this.location.back(),
-      error: (e) => console.error(e)
+      error: (e) => this.toastR.error(e.error)
     })
   }
 }

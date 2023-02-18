@@ -23,19 +23,53 @@ namespace API.Controllers
             _context = context;
         }
 
-        //List all Items in Products
-        //Later, Pagination should be added
         [HttpGet("items")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> listProducts([FromQuery] PageParams productParams)
+#nullable enable
+        public async Task<ActionResult<IEnumerable<ProductDto>>> listProducts([FromQuery] PageParams productParams, [FromQuery] FilterParams? filterParams)
         {
             var products = _context.Products
                                 .Include(u => u.User)
                                 .Include(c => c.Category)
                                 .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
                                 .AsNoTracking();
+            if (filterParams != null)
+            {
+                if (filterParams.Name != "-1")
+                {
+                    products = products.Where(x => x.Name.Contains(filterParams.Name));
+                }
+                if (filterParams.Category != 0)
+                {
+                    products = products.Where(x => x.CategoryId == filterParams.Category);
+                }
+                if (filterParams.MinPrice != 0)
+                {
+                    products = products.Where(x => x.Price >= filterParams.MinPrice);
+                }
+                if (filterParams.MaxPrice != 0)
+                {
+                    products = products.Where(x => x.Price <= filterParams.MaxPrice);
+                }
 
-            var result = await PagedList<ProductDto>.CreateAsync((products), productParams.PageNumber, productParams.ItemsPerPage);
+                switch (filterParams.sort)
+                {
+                    case 1:
+                        products = products.OrderBy(x => x.Price);
+                        break;
+                    case 2:
+                        products = products.OrderByDescending(x => x.Price);
+                        break;
+                    case 4:
+                        products = products.OrderBy(x => x.InsertedOn);
+                        break;
+                    default:
+                        products = products.OrderByDescending(x => x.InsertedOn);
+                        break;
+                }
+            }
+
+            var result = await PagedList<ProductDto>.CreateAsync(products, productParams.PageNumber, productParams.ItemsPerPage);
             Response.AddPaginationHeader(result.TotalItems, result.ItemsPerPage, result.TotalPages, result.CurrentPage);
             return Ok(result);
             //return Ok(_mapper.Map<IEnumerable<ProductDto>>(products));
@@ -274,7 +308,7 @@ namespace API.Controllers
 
             var product = await _context.Products.Where(x => x.ProductId == id).FirstOrDefaultAsync();
 
-            if (product.InsertedBy != user.Id)
+            if (product == null || user == null || product.InsertedBy != user.Id)
             {
                 return BadRequest("Something went wrong!");
             }

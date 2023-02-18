@@ -7,6 +7,7 @@ import { CategoryService } from '../../_Services/category.service';
 import { Category } from '../../_Models/Category';
 import { UpdateProductDto } from '../../_Models/UpdateProductDto';
 import { ProductDto } from '../../_Models/ProductDto';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class InsertItemComponent implements OnInit {
   categories: Category[];
   productForm : FormGroup;
 
-  constructor(private productService: ProductService, private activatedRoute: ActivatedRoute, private _router: Router, private categoryService: CategoryService, private fb: FormBuilder) { }
+  constructor(private productService: ProductService, private activatedRoute: ActivatedRoute, private _router: Router, private categoryService: CategoryService, private fb: FormBuilder, private toast: ToastrService) { }
 
   ngOnInit(): void {
     this.activatedRoute.url.subscribe(response => {
@@ -48,7 +49,6 @@ export class InsertItemComponent implements OnInit {
       if(response == undefined)
       return;
       this.product = response;
-      console.log(this.product.categoryId)
       this.productForm.setValue({
         id: this.product.productId,
         name: this.product.name,
@@ -57,7 +57,6 @@ export class InsertItemComponent implements OnInit {
         price: this.product.price,
         isSale: this.product.isSale
       })
-      console.log(this.productForm.controls['category'].value)
     })
   }
 
@@ -84,8 +83,10 @@ export class InsertItemComponent implements OnInit {
         isSale: this.productForm.controls['isSale'].value
       }
       this.productService.editProduct(updateProduct, this.product.productId).subscribe({
-        next: (v) => this._router.navigateByUrl('/my-items'),
-        error: (e) => console.log(e)
+        next: (v) => {
+          this.toast.success("Item edited successfully")
+          this._router.navigateByUrl('/my-items')},
+        error: (e) => this.toast.error(e)
       })
     } else {
       const user = JSON.parse(localStorage.getItem('user'));
@@ -102,15 +103,12 @@ export class InsertItemComponent implements OnInit {
 
       this.productService.registerProduct(productDto).subscribe({
         next: (v) => {
-          console.log("test next")
-          this._router.navigate(['/my-items'])
+          this.toast.success("Successfully Saved")
         },
         error: (e) => {
-          console.log(e)
-          console.log("test error")
+          this.toast.error(e)
         },
         complete: ()=>{
-          console.log("test complete")
           this._router.navigate(['/my-items'])
         }
       })

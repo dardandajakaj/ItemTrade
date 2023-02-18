@@ -1,8 +1,7 @@
-import { Component, OnInit, TemplateRef} from '@angular/core';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { RegisterUserDto } from '../_Models/RegisterUserDto';
+import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../_Services/account-service.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-nav',
@@ -10,57 +9,22 @@ import { Router } from '@angular/router';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-  modalRef?: BsModalRef;
+
   item: any = {};
   model: any = {};
-  constructor(private modalService: BsModalService, public accountService: AccountService, private router : Router) {}
+  constructor(public accountService: AccountService, private router: Router, private toastR: ToastrService) { }
 
   ngOnInit(): void {
   }
 
-  search(){
-    console.log(this.item)
+  search() {
+    this.router.navigate(['/'], { queryParams: { item: this.item.name } });
   }
-  openSigninForm(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template);
-  }
-
-  openLoginForm(template: TemplateRef<any>){
-    this.modalRef = this.modalService.show(template);
-  }
-
-  onLogin(){
-    console.log(this.model);
-    this.accountService.login(this.model).subscribe({
-      next: (response) => {
-        console.log("this is: "+response);
-        this.modalRef?.hide();
-      },
-      error: (err) => console.log(this.model)
-    })
-
-  }
-
-  onSignUp(){
-    if(this.model.password != this.model.password2){
-      console.log("Password do not match!")
-    }else{
-      const user = {} as RegisterUserDto;
-      user.username = this.model.username;
-      user.password = this.model.password;
-      this.accountService.signup(user).subscribe({
-        next: (response) => {
-          console.log("this is the response: " + response);
-
-        },
-        error: (err) => console.log(this.model)
-      })
-      this.modalRef?.hide();
-    }
-  }
-
-  onLogout(){
+  onLogout() {
     this.accountService.logout();
     this.router.navigateByUrl('/login')
+  }
+  goHome() {
+    throw new Error('Method not implemented.');
   }
 }

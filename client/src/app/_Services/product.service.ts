@@ -6,6 +6,7 @@ import { PaginatedResult } from '../_Models/Pagination';
 import { map } from 'rxjs';
 import { ProductDto } from '../_Models/ProductDto';
 import { UpdateProductDto } from '../_Models/UpdateProductDto';
+import { Filter } from '../_Models/Filter';
 
 @Injectable({
   providedIn: 'root'
@@ -50,9 +51,33 @@ export class ProductService {
         if (response.headers.get("Pagination") !== null) {
           this.paginatedResult.pagination = JSON.parse(response.headers.get("Pagination"))
         }
+        console.log(this.paginatedResult.result)
         return this.paginatedResult;
       })
     );
+  }
+
+  getFilteredProducts(filters: Filter, page?: number, itemsPerPage?: number) {
+
+    let params = new HttpParams();
+    if (page != null && itemsPerPage != null) {
+      params = params.append('pageNumber', page.toString());
+      params = params.append('itemsPerPage', itemsPerPage.toString());
+    }
+    params = params.append('name', filters.name)
+    params = params.append('category', filters.category);
+    params = params.append('minPrice', filters.minPrice);
+    params = params.append('maxPrice', filters.maxPrice);
+    params = params.append('sort', filters.sort);
+    return this.http.get<Product[]>(environment.url + "product/items", { observe: 'response', params }).pipe(
+      map(response => {
+        this.paginatedResult.result = response.body;
+        if (response.headers.get("Pagination") !== null) {
+          this.paginatedResult.pagination = JSON.parse(response.headers.get("Pagination"))
+        }
+        return this.paginatedResult;
+      })
+    )
   }
 
   getProductOfUser(id: number, page?: number, itemsPerPage?: number) {

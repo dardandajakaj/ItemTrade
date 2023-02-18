@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Category } from '../_Models/Category';
 import { LabelType, Options } from '@angular-slider/ngx-slider';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,8 +10,13 @@ import { LabelType, Options } from '@angular-slider/ngx-slider';
 })
 export class SidebarComponent implements OnInit {
   @Input() categories: Category[];
-  minValue: number = 1;
-  maxValue: number = 2000;
+  @Output() searchEventEmitter = new EventEmitter<FormGroup>();
+  // @Output() addPriceRangeEvent = new EventEmitter<number[]>();
+  // @Output() addPriceFilterEvent = new EventEmitter<boolean>();
+  // @Output() addDateFilterEvent = new EventEmitter<boolean>();
+  sideForm : FormGroup;
+  minValue : number = 1;
+  maxValue : number = 2000;
   options: Options = {
     floor: 0,
     ceil: 2000,
@@ -25,9 +31,33 @@ export class SidebarComponent implements OnInit {
       }
     }
   };
-  constructor() { }
+  constructor(public fb : FormBuilder) { }
 
   ngOnInit(): void {
+    this.initForm();
   }
 
+  initForm(){
+    this.sideForm = this.fb.group({
+      name : '',
+      category: '',
+      minPrice: '',
+      maxPrice: '',
+      sort: ''
+    })
+  }
+
+  searchEvent(){
+    console.log(this.sideForm.value)
+    this.searchEventEmitter.emit(this.sideForm.value)
+  }
+
+  resetFilter(){
+    this.sideForm.reset();
+    this.searchEventEmitter.emit(this.sideForm.value)
+  }
+
+  // priceRangeEvent(){
+  //   this.addPriceRangeEvent.emit([this.minValue, this.maxValue]);
+  // }
 }
