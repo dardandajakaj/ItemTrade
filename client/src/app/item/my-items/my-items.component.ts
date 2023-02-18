@@ -6,6 +6,7 @@ import { AccountService } from '../../_Services/account-service.service';
 import { User } from '../../_Models/User';
 import { take } from 'rxjs';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-my-items',
@@ -19,7 +20,7 @@ export class MyItemsComponent implements OnInit {
   itemsPerPage: number = 5;
   user: User;
 
-  constructor(private productService: ProductService, public accountService: AccountService, private router: Router) {
+  constructor(private productService: ProductService, public accountService: AccountService, private toastR: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe(response => {
       this.user = response
     })
@@ -38,10 +39,8 @@ export class MyItemsComponent implements OnInit {
 
   deleteProduct(productId: number) {
     this.productService.deleteProduct(productId).subscribe({
-      next: (v) => {
-
-      },
-      error: (e) => console.error("test error"),
+      next: (v) => this.toastR.success("Successfully deleted!"),
+      error: (e) => this.toastR.error("Something went south!"),
       complete: ()=> this.ngOnInit()
     })
   }

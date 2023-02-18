@@ -10,7 +10,6 @@ import { ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Filter } from '../_Models/Filter';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +31,7 @@ export class HomeComponent implements OnInit {
     maxPrice: 0,
     sort: 0
   }
-  constructor(private categoryService: CategoryService, private productService: ProductService, public router: ActivatedRoute, private toastR: ToastrService) { }
+  constructor(private categoryService: CategoryService, private productService: ProductService, public router: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.getCategories();

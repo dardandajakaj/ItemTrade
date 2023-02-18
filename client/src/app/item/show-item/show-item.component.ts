@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { Product } from 'src/app/_Models/Product';
 import { ProductService } from 'src/app/_Services/product.service';
@@ -16,7 +16,7 @@ export class ShowItemComponent implements OnInit {
   mapMarker = faMapMarkerAlt
   products: Product[] = [];
 
-  constructor(private productService: ProductService, private activatedRoute: ActivatedRoute, private _location: Location) { }
+  constructor(private productService: ProductService, private activatedRoute: ActivatedRoute, private _location: Location, private router: Router) { }
 
   ngOnInit(): void {
     this.productService.getProduct(Number(this.activatedRoute.snapshot.paramMap.get('id'))).subscribe(product => {
@@ -30,10 +30,6 @@ export class ShowItemComponent implements OnInit {
 
   goBack() {
     this._location.back();
-  }
-
-  goToCategory(id: number) {
-    console.log(id)
   }
 
   loadProduct(id: number) {

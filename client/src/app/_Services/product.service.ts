@@ -51,7 +51,6 @@ export class ProductService {
         if (response.headers.get("Pagination") !== null) {
           this.paginatedResult.pagination = JSON.parse(response.headers.get("Pagination"))
         }
-        console.log(this.paginatedResult.result)
         return this.paginatedResult;
       })
     );

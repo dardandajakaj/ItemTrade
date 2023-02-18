@@ -48,7 +48,6 @@ export class SidebarComponent implements OnInit {
   }
 
   searchEvent(){
-    console.log(this.sideForm.value)
     this.searchEventEmitter.emit(this.sideForm.value)
   }
 

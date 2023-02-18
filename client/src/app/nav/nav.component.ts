@@ -25,6 +25,10 @@ export class NavComponent implements OnInit {
     this.router.navigateByUrl('/login')
   }
   goHome() {
-    throw new Error('Method not implemented.');
+    if(this.router.url == '/'){
+      window.location.reload();
+    }else{
+      this.router.navigateByUrl('/');
+    }
   }
 }
