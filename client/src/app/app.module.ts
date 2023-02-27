@@ -22,6 +22,7 @@ import { SharedModule } from './_Modules/shared.module';
 import { LoginComponent } from './users/login/login.component';
 import { MyItemsComponent } from './item/my-items/my-items.component';
 import { ToastrModule } from 'ngx-toastr';
+import { FavoritesComponent } from './favorites/favorites.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { ToastrModule } from 'ngx-toastr';
     SidebarComponent,
     HomeComponent,
     LoginComponent,
-    MyItemsComponent
+    MyItemsComponent,
+    FavoritesComponent
   ],
   imports: [
     BrowserModule,

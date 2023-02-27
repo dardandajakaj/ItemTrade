@@ -10,6 +10,7 @@
       <div class="row">
         <div *ngFor="let product of products" class="product">
           <app-item-card [product]="product"></app-item-card>
+          <button class="btn btn-danger" style="float: right;" (click)="removeFavorite(product.productId)">Remove Favorite</button>
         </div>
         <div class="pagination">
           <pagination

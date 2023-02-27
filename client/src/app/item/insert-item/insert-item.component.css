@@ -45,3 +45,11 @@ button[type="submit"]{
   letter-spacing: 1px;
   margin: auto;
 }
+
+.is-invalid{
+  box-shadow: 0 0 10px red
+}
+
+.is-valid{
+  box-shadow: 0 0 10px green;
+}

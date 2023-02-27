@@ -1,22 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { Category } from '../_Models/Category';
+import { Observable } from 'rxjs';
+import { FormGroup } from '@angular/forms';
+import { Product } from '../_Models/Product';
+import { environment } from 'src/environments/environment';
+import { Pagination } from '../_Models/Pagination';
+import { Filter } from '../_Models/Filter';
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { CategoryService } from '../_Services/category.service';
 import { ProductService } from '../_Services/product.service';
-import { Product } from '../_Models/Product';
-import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import { Pagination } from '../_Models/Pagination';
-import { environment } from '../../environments/environment';
-import { ActivatedRoute } from '@angular/router';
-import { FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { Filter } from '../_Models/Filter';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  selector: 'app-favorites',
+  templateUrl: './favorites.component.html',
+  styleUrls: ['./favorites.component.css']
 })
-export class HomeComponent implements OnInit {
+export class FavoritesComponent implements OnInit {
+
   mapMarker = faMapMarkerAlt;
   public categories$: Observable<Category[]>;
   public products: Product[];
@@ -31,7 +33,7 @@ export class HomeComponent implements OnInit {
     maxPrice: 0,
     sort: 0
   }
-  constructor(private categoryService: CategoryService, private productService: ProductService, public router: ActivatedRoute) { }
+  constructor(private categoryService: CategoryService, private productService: ProductService, private router: Router, private toastR: ToastrService) { }
 
   ngOnInit(): void {
     this.getCategories();
@@ -43,7 +45,7 @@ export class HomeComponent implements OnInit {
   }
 
   getProducts() {
-    this.productService.getFilteredProducts(this.filters, false, this.pageNumber, environment.itemsPerPage).subscribe(response => {
+    this.productService.getFilteredProducts(this.filters, true).subscribe((response) => {
       this.products = response.result;
       this.pagination = response.pagination;
     })
@@ -58,19 +60,19 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  filterChanged(filter: FormGroup) {
+    this.checkFilter(filter)
+    this.productService.getFilteredProducts(this.filters, true, this.pageNumber, environment.itemsPerPage).subscribe(response => {
+      this.products = response.result;
+      this.pagination = response.pagination;
+    })
+  }
+
   changeItemSize() {
     environment.itemsPerPage = this.itemsPerPage
     setTimeout(() => {
       this.ngOnInit()
     }, 1000);
-  }
-
-  filterChanged(filter: FormGroup) {
-    this.checkFilter(filter)
-    this.productService.getFilteredProducts(this.filters, false, this.pageNumber, environment.itemsPerPage).subscribe(response => {
-      this.products = response.result;
-      this.pagination = response.pagination;
-    })
   }
 
   checkFilter(filter: FormGroup) {
@@ -79,5 +81,13 @@ export class HomeComponent implements OnInit {
     this.filters.minPrice = (filter['minPrice'] == '' || filter['minPrice'] == null) ? 0 : filter['minPrice'];
     this.filters.maxPrice = (filter['maxPrice'] == '' || filter['maxPrice'] == null) ? 0 : filter['maxPrice'];
     this.filters.sort = (filter['sort'] == '' || filter['sort'] == null) ? 0 : filter['sort'];
+  }
+
+  removeFavorite(productId : number){
+    this.productService.removeFavorite(productId).subscribe({
+      next: (v) => this.toastR.success("Successfully deleted!"),
+      error: (e) => this.toastR.error("Something went south!"),
+      complete: ()=> this.ngOnInit()
+    })
   }
 }

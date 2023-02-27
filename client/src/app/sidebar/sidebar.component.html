@@ -1,66 +1,38 @@
 <div id="sidebar">
-  <!-- <label for="Categories"><span>Categories</span></label>
-  <input type="checkbox" id="Categories" checked />
-  <div class="category-section">
-    <div *ngFor="let category of categories" class="input-category">
-      <a class="category" [routerLink]="['/category', category.categoryId]"
-      routerLinkActive="router-link-active" >{{category.name}}</a>
-    </div>
-  </div>
-  <hr />
-  <label for="price"><span>Price</span></label>
-  <ngx-slider
-    [(value)]="minValue"
-    [(highValue)]="maxValue"
-    [options]="options"
-    (userChangeEnd)="priceRangeEvent()"
-  ></ngx-slider>
-  <hr />
-  <label for="priceSort"><span>Sort By Price</span></label>
-  <input type="radio" name="priceSort" id="Cheapest" /><span
-    >Cheapest</span
-  ><br />
-  <input type="radio" name="priceSort" id="Expensive" /><span
-    >Most Expensive</span
-  >
-  <hr />
-  <label for="date"><span>Sort By Date</span></label>
-  <input type="radio" name="date" id="Newest" value="1" /><span
-    >Newest</span
-  ><br />
-  <input type="radio" name="date" id="Oldest" value="2" /><span
-    >Oldest</span
-  >
-  <hr /> -->
   <ng-container>
     <form [formGroup]="sideForm" (change)="searchEvent()">
       <div class="section">
         <label for="cheapest">Item:</label>
-        <input
-          id="name"
-          type="text"
-          formControlName="name"
-          name="name"
-        />
+        <input id="name" type="text" formControlName="name" name="name" />
       </div>
       <label for="Categories"><span>Categories</span></label>
       <input type="checkbox" id="Categories" checked />
       <div class="category-section">
         <div *ngFor="let category of categories">
           <input
-          id="{{category.name}}"
+            id="{{ category.name }}"
             type="radio"
             value="{{ category.categoryId }}"
             formControlName="category"
             name="category"
-          ><label for="{{category.name}}">{{ category.name }}</label>
+          /><label for="{{ category.name }}">{{ category.name }}</label>
         </div>
       </div>
       <div class="section">
         <label for="minPrice"><span>Min: </span></label>
-        <input type="number" formControlName="minPrice" name="minPrice" min="0"/>
+        <input
+          type="number"
+          formControlName="minPrice"
+          name="minPrice"
+          min="0"
+        />
         <label for="maxPrice"><span>Max: </span></label>
-        <input type="number" formControlName="maxPrice" name="maxPrice" min="1"/>
+        <input
+          type="number"
+          formControlName="maxPrice"
+          name="maxPrice"
+          min="1"
+        />
       </div>
       <div class="section">
         <input

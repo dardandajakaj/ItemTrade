@@ -12,6 +12,7 @@ import { Filter } from '../_Models/Filter';
   providedIn: 'root'
 })
 export class ProductService {
+
   paginatedResult: PaginatedResult<Product[]> = new PaginatedResult<Product[]>();
 
   constructor(private http: HttpClient) {
@@ -56,7 +57,7 @@ export class ProductService {
     );
   }
 
-  getFilteredProducts(filters: Filter, page?: number, itemsPerPage?: number) {
+  getFilteredProducts(filters: Filter, favorite?: boolean, page?: number, itemsPerPage?: number) {
 
     let params = new HttpParams();
     if (page != null && itemsPerPage != null) {
@@ -68,15 +69,28 @@ export class ProductService {
     params = params.append('minPrice', filters.minPrice);
     params = params.append('maxPrice', filters.maxPrice);
     params = params.append('sort', filters.sort);
-    return this.http.get<Product[]>(environment.url + "product/items", { observe: 'response', params }).pipe(
-      map(response => {
-        this.paginatedResult.result = response.body;
-        if (response.headers.get("Pagination") !== null) {
-          this.paginatedResult.pagination = JSON.parse(response.headers.get("Pagination"))
-        }
-        return this.paginatedResult;
-      })
-    )
+    if (!favorite) {
+      return this.http.get<Product[]>(environment.url + "product/items", { observe: 'response', params }).pipe(
+        map(response => {
+          this.paginatedResult.result = response.body;
+          if (response.headers.get("Pagination") !== null) {
+            this.paginatedResult.pagination = JSON.parse(response.headers.get("Pagination"))
+          }
+          return this.paginatedResult;
+        })
+      )
+    } else {
+      return this.http.get<Product[]>(environment.url + 'product/favorites',{ observe: 'response', params, headers: this.loadToken() }).pipe(
+        map(response => {
+          this.paginatedResult.result = response.body;
+          if (response.headers.get("Pagination") !== null) {
+            this.paginatedResult.pagination = JSON.parse(response.headers.get("Pagination"))
+          }
+          return this.paginatedResult;
+        })
+      )
+    }
+
   }
 
   getProductOfUser(id: number, page?: number, itemsPerPage?: number) {
@@ -110,6 +124,14 @@ export class ProductService {
   deleteProduct(productId: number) {
 
     return this.http.delete(environment.url + 'product/delete/' + productId, { headers: this.loadToken() });
+  }
+
+  addToFavorites(productId: number) {
+    return this.http.post(environment.url + 'product/favorites/add', productId, { headers: this.loadToken() });
+  }
+
+  removeFavorite(productId: number) {
+    return this.http.delete(environment.url + 'product/favorites/remove/' + productId, {headers: this.loadToken()});
   }
 
   loadToken() {

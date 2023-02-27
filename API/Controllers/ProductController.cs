@@ -72,14 +72,6 @@ namespace API.Controllers
             var result = await PagedList<ProductDto>.CreateAsync(products, productParams.PageNumber, productParams.ItemsPerPage);
             Response.AddPaginationHeader(result.TotalItems, result.ItemsPerPage, result.TotalPages, result.CurrentPage);
             return Ok(result);
-            //return Ok(_mapper.Map<IEnumerable<ProductDto>>(products));
-            // return await (from product in _context.Set<Product>()
-            //                 join user in _context.Set<User>()
-            //                 on product.InsertedBy equals user.Id
-            //                 join category in _context.Set<Category>()
-            //                 on product.CategoryId equals category.CategoryId
-            //                 select product                       
-            // ).ToListAsync();
         }
 
         [HttpGet("myitems/{userId}")]
@@ -111,30 +103,16 @@ namespace API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ProductDto>>> getProductByName(String searchTerm, [FromQuery] PageParams productParams)
         {
-            //need autoMapper to Dto
             var productList = _context.Products
                                 .Include(u => u.User)
                                 .Include(c => c.Category)
                                 .Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()))
                                 .ProjectTo<ProductDto>(_mapper.ConfigurationProvider).AsNoTracking();
+
+
             var result = await PagedList<ProductDto>.CreateAsync(productList, productParams.PageNumber, productParams.ItemsPerPage);
             Response.AddPaginationHeader(result.TotalItems, result.ItemsPerPage, result.TotalPages, result.CurrentPage);
             return Ok(result);
-            // return await (from product in _context.Set<Product>().Where(item => item.Name.ToLower().Contains(searchTerm.ToLower()))
-            //                 join user in _context.Set<User>()
-            //                 on product.InsertedBy equals user.Id
-            //                 join category in _context.Set<Category>()
-            //                 on product.CategoryId equals category.CategoryId
-            //                 select new ProductDto{
-            //                     Name = product.Name,
-            //                     Description = product.Description,
-            //                     Owner = user.Id,
-            //                     PublishedOn = product.InsertedOn,
-            //                     Category = category.CategoryId,
-            //                     Price = product.Price,
-            //                     OnSale = product.IsSale
-            //                 }            
-            // ).ToListAsync();            
         }
 
         [HttpGet("items/category/{categoryId}")]
@@ -148,56 +126,57 @@ namespace API.Controllers
             var result = await PagedList<ProductDto>.CreateAsync(products, productParams.PageNumber, productParams.ItemsPerPage);
             Response.AddPaginationHeader(result.TotalItems, result.ItemsPerPage, result.TotalPages, result.CurrentPage);
             return Ok(result);
-            // return await (from product in _context.Set<Product>().Where( item => item.CategoryId == categoryId)
-            //               join user in _context.Set<User>()
-            //               on product.InsertedBy equals user.Id
-            //               join category in _context.Set<Category>()
-            //               on product.CategoryId equals category.CategoryId
-            //               select new ProductDto{
-            //                 Name = product.Name,
-            //                 Description = product.Description,
-            //                 Owner = user.Id,
-            //                 PublishedOn = product.InsertedOn,
-            //                 Category = category.CategoryId,
-            //                 Price = product.Price,
-            //                 OnSale = product.IsSale
-            //               }
-            // ).ToListAsync(); versioni i pare 
         }
 
-        [HttpGet("items/favorite/{id}")] //could be http post method later
+        [HttpGet("favorites")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> getFavoriteProducts(int userId, [FromQuery] PageParams productParams)
+        public async Task<ActionResult<IEnumerable<ProductDto>>> getFavoriteProducts([FromQuery] PageParams productParams, [FromQuery] FilterParams? filterParams)
         {
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.Where(x => x.UserName == username).FirstAsync();
+            var elements = await _context.UserFavorites.Where(x => x.UserId == user.Id).Select(x => x.ProductId).ToListAsync();
+            var products = _context.Products.Include(u => u.User).Include(c => c.Category).Where(x => elements.Contains(x.ProductId)).ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+                                .AsNoTracking(); ;
+            if (filterParams != null)
+            {
+                if (filterParams.Name != "-1")
+                {
+                    products = products.Where(x => x.Name.Contains(filterParams.Name));
+                }
+                if (filterParams.Category != 0)
+                {
+                    products = products.Where(x => x.CategoryId == filterParams.Category);
+                }
+                if (filterParams.MinPrice != 0)
+                {
+                    products = products.Where(x => x.Price >= filterParams.MinPrice);
+                }
+                if (filterParams.MaxPrice != 0)
+                {
+                    products = products.Where(x => x.Price <= filterParams.MaxPrice);
+                }
 
-            // var products = await (from item in _context.Set<UserFavorites>().Where(i => i.UserId == userId)
-            //                join product in _context.Set<Product>()
-            //                on item.ProductId equals product.ProductId
-            //                join user in _context.Set<User>()
-            //                on item.UserId equals user.Id
-            //                join category in _context.Set<Category>()
-            //                on product.CategoryId equals category.CategoryId
-            //                select new ProductDto{
-            //                 Name = product.Name,
-            //                 Description = product.Description,
-            //                 Owner = user.Id,
-            //                 PublishedOn = product.InsertedOn,
-            //                 Category = category.CategoryId,
-            //                 Price = product.Price,
-            //                 OnSale = product.IsSale
-            //                }
-            // ).ToListAsync();                 
-            var products = _context.UserFavorites
-                                        .Include(p => p.Product)
-                                        .Include(u => u.User)
-                                        .Include(c => c.Product.Category)
-                                        .Where(x => x.UserId == userId)
-                                        .ProjectTo<ProductDto>(_mapper.ConfigurationProvider).AsNoTracking();
-
+                switch (filterParams.sort)
+                {
+                    case 1:
+                        products = products.OrderBy(x => x.Price);
+                        break;
+                    case 2:
+                        products = products.OrderByDescending(x => x.Price);
+                        break;
+                    case 4:
+                        products = products.OrderBy(x => x.InsertedOn);
+                        break;
+                    default:
+                        products = products.OrderByDescending(x => x.InsertedOn);
+                        break;
+                }
+            }
             var result = await PagedList<ProductDto>.CreateAsync(products, productParams.PageNumber, productParams.ItemsPerPage);
             Response.AddPaginationHeader(result.TotalItems, result.ItemsPerPage, result.TotalPages, result.CurrentPage);
             return Ok(result);
         }
+
 
         [HttpPost("item/add")]
         [Authorize]
@@ -257,13 +236,15 @@ namespace API.Controllers
 
         }
 
-        [HttpGet("AddToFavoriteItem"), Authorize]
-        public async Task<ActionResult> addToFavorites(int userId, int productId)
+        [HttpPost("favorites/add"), Authorize]
+        public async Task<ActionResult> addToFavorites([FromBody] int productId)
         {
-
-            if (!await _context.Users.AnyAsync(x => x.Id == userId))
+            Console.WriteLine(productId);
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.Where(x => x.UserName == username).FirstOrDefaultAsync();
+            if (user == null)
             {
-                return BadRequest("User not found");
+                return BadRequest("Not Permitted!!!");
             }
 
             if (!await _context.Products.AnyAsync(x => x.ProductId == productId))
@@ -271,32 +252,41 @@ namespace API.Controllers
                 return BadRequest("Product not found!");
             }
 
+            if (await _context.UserFavorites.AnyAsync(x => x.UserId == user.Id && x.ProductId == productId))
+            {
+                return BadRequest("Already Favorite!");
+            }
+
             var userFavorite = new UserFavorites
             {
-                UserId = userId,
+                UserId = user.Id,
                 ProductId = productId
             };
 
             _context.UserFavorites.Add(userFavorite);
-            await _context.SaveChangesAsync();
-
-            return Ok();
-        }
-
-        [HttpGet("RemoveFavorite")]
-        [Authorize]
-        public async Task<ActionResult> RemoveFavorite(int productId, int userId)
-        {
-
-            var favoriteItem = await _context.UserFavorites.Where(x => x.ProductId == productId && x.UserId == userId).FirstOrDefaultAsync();
-            if (favoriteItem != null)
+            if (await _context.SaveChangesAsync() > 0)
             {
-                _context.UserFavorites.Remove(favoriteItem);
-                await _context.SaveChangesAsync();
-                return Ok();
+                return Ok(true);
             }
-
-            return BadRequest("Error while removing");
+            return BadRequest("Something went South!!!");
+        }
+        
+        [HttpDelete("favorites/remove/{productId}"), Authorize]
+        public async Task<ActionResult> removeFavorite(int productId)
+        {
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.Where(x => x.UserName == username).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return BadRequest("Something went South");
+            }
+            var item = await _context.UserFavorites.Where(x => x.ProductId == productId && x.UserId == user.Id).FirstOrDefaultAsync();
+            if(item == null){
+                return BadRequest();
+            }
+            _context.UserFavorites.Remove(item);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         [HttpPut("edit/{id}")]

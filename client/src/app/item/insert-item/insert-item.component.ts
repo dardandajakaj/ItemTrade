@@ -8,6 +8,7 @@ import { Category } from '../../_Models/Category';
 import { UpdateProductDto } from '../../_Models/UpdateProductDto';
 import { ProductDto } from '../../_Models/ProductDto';
 import { ToastrService } from 'ngx-toastr';
+import { skip } from 'rxjs';
 
 
 @Component({
@@ -74,6 +75,10 @@ export class InsertItemComponent implements OnInit {
   }
 
   saveItem() {
+    if(this.productForm.status == 'INVALID'){
+      this.toast.error('Invalid product!')
+      return
+    }
     if (this.product != undefined) {
       const updateProduct: UpdateProductDto = {
         categoryId: this.productForm.controls['category'].value,
@@ -86,11 +91,12 @@ export class InsertItemComponent implements OnInit {
         next: (v) => {
           this.toast.success("Item edited successfully")
           this._router.navigateByUrl('/my-items')},
-        error: (e) => this.toast.error(e)
+        error: (e) => this.toast.error(e.error)
       })
     } else {
       const user = JSON.parse(localStorage.getItem('user'));
       let date = new Date();
+
       const productDto : ProductDto = {
         name: this.productForm.controls['name'].value,
         description: this.productForm.controls['description'].value,
@@ -106,7 +112,7 @@ export class InsertItemComponent implements OnInit {
           this.toast.success("Successfully Saved")
         },
         error: (e) => {
-          this.toast.error(e)
+          this.toast.error(e.error.title)
         },
         complete: ()=>{
           this._router.navigate(['/my-items'])
