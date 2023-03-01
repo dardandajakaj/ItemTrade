@@ -15,6 +15,8 @@ namespace API.Helpers
                     .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
            CreateMap<User, UserDto>();
            CreateMap<UpdateProductDto, Product>();
+           CreateMap<Message, MessageDto>();
+           CreateMap<MessageDto, Message>();
 
         }
     }

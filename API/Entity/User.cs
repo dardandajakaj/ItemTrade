@@ -33,5 +33,10 @@ namespace API.Entity
 
         public ICollection<Message> MessagesSent { get; set; }
         public ICollection<Message> MessagesReceived { get; set; }
+
+        internal static object FindFirst(object nameIdentifier)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
