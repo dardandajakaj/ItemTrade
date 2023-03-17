@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221231175112_initialDbMigration")]
-    partial class initialDbMigration
+    [Migration("20230315151937_MessageTableAdded")]
+    partial class MessageTableAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,40 @@ namespace API.Migrations
                     b.HasIndex("AddedBy");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("API.Entity.Conversation", b =>
+                {
+                    b.Property<int>("ConversationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ConversationId"), 1L, 1);
+
+                    b.Property<bool>("DeletedByReceiver")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DeletedBySender")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ConversationId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Conversations");
                 });
 
             modelBuilder.Entity("API.Entity.Product", b =>
@@ -147,23 +181,18 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entity.UserFavorites", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "ProductId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserFavorites");
                 });
@@ -177,6 +206,33 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("API.Entity.Conversation", b =>
+                {
+                    b.HasOne("API.Entity.Product", "Product")
+                        .WithMany("Conversations")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("API.Entity.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entity.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("API.Entity.Product", b =>
@@ -209,7 +265,7 @@ namespace API.Migrations
                     b.HasOne("API.Entity.User", "User")
                         .WithMany("UserFavorites")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
@@ -224,6 +280,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entity.Product", b =>
                 {
+                    b.Navigation("Conversations");
+
                     b.Navigation("UserFavorites");
                 });
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230227121010_MessageAdded")]
-    partial class MessageAdded
+    [Migration("20230316135014_AddedConversationColumnMessages")]
+    partial class AddedConversationColumnMessages
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,6 +51,40 @@ namespace API.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("API.Entity.Conversation", b =>
+                {
+                    b.Property<int>("ConversationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ConversationId"), 1L, 1);
+
+                    b.Property<bool>("DeletedByReceiver")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("DeletedBySender")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ConversationId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Conversations");
+                });
+
             modelBuilder.Entity("API.Entity.Message", b =>
                 {
                     b.Property<int>("Id")
@@ -62,17 +96,11 @@ namespace API.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("DeletedByReceiver")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("DeletedBySender")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ReadOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ReceiverId")
+                    b.Property<int>("ConversationId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("SenderId")
                         .HasColumnType("int");
@@ -82,11 +110,11 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReceiverId");
+                    b.HasIndex("ConversationId");
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Message");
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("API.Entity.Product", b =>
@@ -212,21 +240,48 @@ namespace API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("API.Entity.Message", b =>
+            modelBuilder.Entity("API.Entity.Conversation", b =>
                 {
-                    b.HasOne("API.Entity.User", "Receiver")
-                        .WithMany("MessagesReceived")
-                        .HasForeignKey("ReceiverId")
+                    b.HasOne("API.Entity.Product", "Product")
+                        .WithMany("Conversations")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("API.Entity.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("API.Entity.User", "Sender")
-                        .WithMany("MessagesSent")
+                        .WithMany()
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Product");
+
                     b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("API.Entity.Message", b =>
+                {
+                    b.HasOne("API.Entity.Conversation", "Conversation")
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entity.User", "Sender")
+                        .WithMany("Messages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Conversation");
 
                     b.Navigation("Sender");
                 });
@@ -274,16 +329,21 @@ namespace API.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("API.Entity.Conversation", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("API.Entity.Product", b =>
                 {
+                    b.Navigation("Conversations");
+
                     b.Navigation("UserFavorites");
                 });
 
             modelBuilder.Entity("API.Entity.User", b =>
                 {
-                    b.Navigation("MessagesReceived");
-
-                    b.Navigation("MessagesSent");
+                    b.Navigation("Messages");
 
                     b.Navigation("Products");
 

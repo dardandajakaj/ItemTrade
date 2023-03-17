@@ -1,6 +1,5 @@
 using API.Dto;
 using API.Entity;
-using API.Interfaces;
 using AutoMapper;
 
 namespace API.Helpers
@@ -15,9 +14,12 @@ namespace API.Helpers
                     .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
            CreateMap<User, UserDto>();
            CreateMap<UpdateProductDto, Product>();
-           CreateMap<Message, MessageDto>();
-           CreateMap<MessageDto, Message>();
-
+           CreateMap<Conversation, ConversationDto>()
+                    .ForMember(dest => dest.Sender, opt => opt.MapFrom(src => src.Sender.Fullname))
+                    .ForMember(dest => dest.Receiver, opt => opt.MapFrom(src => src.Receiver.Fullname));
+            CreateMap<ConversationDto,Conversation>();
+            CreateMap<Message, MessageDto>();
+            CreateMap<MessageDto,Message>();
         }
     }
 }

@@ -30,13 +30,6 @@ namespace API.Entity
 
         public ICollection<Product> Products { get; set; }
         public ICollection<UserFavorites> UserFavorites { get; set; }
-
-        public ICollection<Message> MessagesSent { get; set; }
-        public ICollection<Message> MessagesReceived { get; set; }
-
-        internal static object FindFirst(object nameIdentifier)
-        {
-            throw new NotImplementedException();
-        }
+        public ICollection<Message> Messages { get; set; }
     }
 }

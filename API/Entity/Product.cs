@@ -11,7 +11,7 @@ namespace API.Entity
         public string Description { get; set; }
         public int InsertedBy { get; set; }
         public DateTime InsertedOn { get; set; }
-        
+
         public int CategoryId { get; set; }
         public float Price { get; set; }
         public bool IsSale { get; set; }
@@ -23,5 +23,6 @@ namespace API.Entity
         public Category Category { get; set; }
 
         public ICollection<UserFavorites> UserFavorites { get; set; }
+        public ICollection<Conversation> Conversations { get; set; }
     }
 }

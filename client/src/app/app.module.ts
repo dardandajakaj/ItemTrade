@@ -23,6 +23,7 @@ import { LoginComponent } from './users/login/login.component';
 import { MyItemsComponent } from './item/my-items/my-items.component';
 import { ToastrModule } from 'ngx-toastr';
 import { FavoritesComponent } from './favorites/favorites.component';
+import { MessageComponent } from './message/message.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { FavoritesComponent } from './favorites/favorites.component';
     HomeComponent,
     LoginComponent,
     MyItemsComponent,
-    FavoritesComponent
+    FavoritesComponent,
+    MessageComponent
   ],
   imports: [
     BrowserModule,
