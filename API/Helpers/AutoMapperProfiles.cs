@@ -12,14 +12,15 @@ namespace API.Helpers
                     .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.User.Fullname))
                     .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.User.Street + ", " + src.User.City + ' ' + src.User.State))
                     .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
-           CreateMap<User, UserDto>();
-           CreateMap<UpdateProductDto, Product>();
-           CreateMap<Conversation, ConversationDto>()
-                    .ForMember(dest => dest.Sender, opt => opt.MapFrom(src => src.Sender.Fullname))
-                    .ForMember(dest => dest.Receiver, opt => opt.MapFrom(src => src.Receiver.Fullname));
+            CreateMap<User, UserDto>();
+            CreateMap<UpdateProductDto, Product>();
+            CreateMap<Conversation, ConversationDto>()
+                     .ForMember(dest => dest.Sender, opt => opt.MapFrom(src => src.Sender.Fullname))
+                     .ForMember(dest => dest.Receiver, opt => opt.MapFrom(src => src.Receiver.Fullname))
+                     .ForMember(dest => dest.Product, opt => opt.MapFrom(src => src.Product.Name));
             CreateMap<ConversationDto,Conversation>();
-            CreateMap<Message, MessageDto>();
-            CreateMap<MessageDto,Message>();
+            CreateMap<Message, MessageDto>().ReverseMap();
+            
         }
     }
 }

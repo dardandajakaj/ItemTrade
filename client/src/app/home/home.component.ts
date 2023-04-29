@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Filter } from '../_Models/Filter';
+import { User } from '../_Models/User';
 
 @Component({
   selector: 'app-home',
@@ -31,6 +32,8 @@ export class HomeComponent implements OnInit {
     maxPrice: 0,
     sort: 0
   }
+
+
   constructor(private categoryService: CategoryService, private productService: ProductService, public router: ActivatedRoute) { }
 
   ngOnInit(): void {

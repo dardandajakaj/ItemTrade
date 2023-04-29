@@ -1,0 +1,54 @@
+.participant-box{
+  margin: 0;
+  padding-top: 20px;
+  background-color: #eeeeee;
+  border-radius: 20px 0 0 20px;
+  border-right: 2px #ddd solid;
+}
+
+.conversation-box{
+  margin: 0;
+  padding-top: 20px;
+  background-color: #eeeeee;
+  border-radius: 0 20px 20px 0;
+}
+
+.participant-box input{
+  margin-bottom: 20px;
+}
+
+.conversation-header{
+  text-align: center;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.conversation-body{
+  margin: 10px 5px;
+  height: 500px;
+}
+
+.sender,.receiver{
+  font-size: 1.2rem;
+  font-weight: 200;
+  line-height: 2;
+  padding: 0 20px;
+  width: fit-content;
+}
+
+.sender{
+  float: right;
+  background-color: #3A71CA;
+  color: #eeeeee;
+  border-radius:20px 20px 0 20px;
+}
+
+.receiver{
+  background-color: #F5F6F7;
+  border-radius: 0 20px 20px 20px;
+}
+
+#paper-plane{
+  font-size: 2rem;
+  margin-left: 10px;
+}

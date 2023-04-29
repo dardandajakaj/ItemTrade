@@ -11,6 +11,8 @@ import { MyItemsComponent } from './item/my-items/my-items.component';
 import { InsertItemComponent } from './item/insert-item/insert-item.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { FavoritesComponent } from './favorites/favorites.component';
+import { MessageComponent } from './message/message.component';
+import { ConversationComponent } from './conversation/conversation.component';
 
 
 const routes: Routes = [
@@ -22,7 +24,8 @@ const routes: Routes = [
       { path: 'my-items', component: MyItemsComponent },
       { path: 'edit-item/:id', component: InsertItemComponent },
       { path: 'insert-item', component: InsertItemComponent },
-      { path: 'favorites', component: FavoritesComponent}
+      { path: 'favorites', component: FavoritesComponent},
+      { path: 'messages', component: ConversationComponent}
     ]
   },
   { path: 'category/:id', component: HomeComponent },

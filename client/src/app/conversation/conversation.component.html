@@ -1,0 +1,124 @@
+<!-- <div class="row content-section">
+  <div class="conversation-zone col-md-3">
+    <h3>Chats</h3>
+    <div
+      class="conversation"
+      *ngFor="let conversation of conversations$ | async"
+    >
+      <button
+        class="participant"
+        (click)="selectChat(conversation.conversationId)"
+      >
+        <p *ngIf="user['id'] == conversation.senderId; else participant">
+          {{ conversation.receiver }}
+        </p>
+        <ng-template #participant
+          ><p>{{ conversation.sender }}</p></ng-template
+        >
+      </button>
+      <div class="unread"></div>
+    </div>
+  </div>
+  <div class="chat-zone col-md-9">
+    <div class="chat-header">
+      <ng-container *ngIf="currentConversation == null; else header">
+        <h3>Messages</h3></ng-container>
+      <ng-template #header>
+        <h3>
+          {{ currentConversation.product }} -
+          {{
+            currentConversation.receiver == user["id"]
+              ? currentConversation.sender
+              : currentConversation.receiver
+          }}
+        </h3>
+      </ng-template>
+    </div>
+    <div class="conversationBox">
+      <p *ngIf="messages === null; else messageTemplate">No messages found</p>
+      <ng-template #messageTemplate>
+        <ng-container *ngFor="let message of messages">
+          <div
+            [ngClass]="message.senderId == user['id'] ? 'sender' : 'receiver'"
+            class="message"
+          >
+            <p>
+              {{ message.content }}
+            </p>
+          </div>
+        </ng-container>
+      </ng-template>
+    </div>
+
+    <div class="messagebox">
+      <div class="form-group row">
+        <div class="col-md-10">
+          <input
+          type="text"
+          name="message"
+          id="message"
+          class="form-control"
+          placeholder="Message..."
+        />
+        </div>
+        <div class="col-md-2">
+
+        <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="row content-section">
+  <div class="col-md-3 participant-box">
+    <div class="form-group">
+      <input class="form-control" type="text" name="searchParticipant" placeholder="Search...">
+    </div>
+    <ng-container *ngIf="conversations$ != null"; else noConversation>
+      <div *ngFor="let conversation of conversations$ | async">
+        <div class="participant" (click)="selectChat(conversation.conversationId)">
+          <h4>
+            {{
+              conversation.receiver == user["id"]
+                ? conversation.sender
+                : conversation.receiver
+            }}
+          </h4>
+          <h5>{{conversation.product}}</h5>
+        </div>
+        <hr>
+      </div>
+    </ng-container>
+    <ng-template #noConversation><h4>No Conversation Found!</h4></ng-template>
+  </div>
+  <div class="col-md-9 conversation-box">
+    <div class="conversation-header">
+      <ng-container *ngIf="currentConversation == null; else conversationHeader">Messages</ng-container>
+      <ng-template #conversationHeader>
+        {{ currentConversation.product }} -
+        {{
+          currentConversation.receiver == user["id"]
+            ? currentConversation.sender
+            : currentConversation.receiver
+        }}
+    </ng-template>
+    </div>
+    <div class="conversation-body">
+      <ng-container *ngIf="messages != null"; else conversationArea>
+        <div #conversationArea *ngFor="let message of messages">
+          <p [ngClass]="message.senderId != user['id'] ? 'receiver' : 'sender'">{{message.content}}</p>
+        </div>
+    </ng-container>
+    </div>
+    <div class="conversation-form">
+      <div class="form-group">
+        <div class="form-groupcard-footer text-muted d-flex justify-content-start align-items-center p-3">
+          <input type="text" class="form-control form-control-lg" name="" id="" aria-describedby="helpId" placeholder="Message...">
+          <fa-icon id="paper-plane" [icon]="faPaperPlane"></fa-icon>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>

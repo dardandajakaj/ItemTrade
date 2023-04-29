@@ -26,6 +26,8 @@ namespace API.Data
             builder.Entity<UserFavorites>().HasOne(uf => uf.Product).WithMany(p => p.UserFavorites).OnDelete(DeleteBehavior.NoAction);
             builder.Entity<Message>().HasOne(m => m.Sender).WithMany(u => u.Messages).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Message>().HasOne(m => m.Conversation).WithMany(c => c.Messages).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Conversation>().HasOne(c => c.Sender).WithMany(s => s.ConversationsSender).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Conversation>().HasOne(c => c.Receiver).WithMany(r => r.ConversationsReceiver).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

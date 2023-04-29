@@ -31,5 +31,7 @@ namespace API.Entity
         public ICollection<Product> Products { get; set; }
         public ICollection<UserFavorites> UserFavorites { get; set; }
         public ICollection<Message> Messages { get; set; }
+        public ICollection<Conversation> ConversationsSender { get; set; }
+        public ICollection<Conversation> ConversationsReceiver { get; set; }
     }
 }

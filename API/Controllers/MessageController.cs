@@ -3,6 +3,7 @@ using API.Data;
 using API.Dto;
 using API.Entity;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,33 @@ namespace API.Controllers
         private readonly DataContext _context;
 
         public MessageController(DataContext context, IMapper mapper)
-
         {
             _mapper = mapper;
             _context = context;
         }
+        [HttpGet("conversations/user/{userId}")]
+        public async Task<ActionResult<IEnumerable<Conversation>>> getConversationOfUser(int userId){
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if(username == ""){
+                return BadRequest("Need to be authenticated");
+            }
+
+            var user = await _context.Users.Where(x => x.UserName == username).FirstAsync();
+
+            var conversations = await _context.Conversations
+                                                .Include(s => s.Sender)
+                                                .Include(r => r.Receiver)
+                                                .Include(p => p.Product)
+                                                .Where(x => x.SenderId == userId || x.ReceiverId == userId)
+                                                .ProjectTo<ConversationDto>(_mapper.ConfigurationProvider)
+                                                .ToListAsync();
+
+            if(conversations.Count > 0){
+                return Ok(_mapper.Map<List<ConversationDto>>(conversations));
+            }
+            return BadRequest("Unexpected Error!");
+        }
+
         [HttpGet("conversations/{productId}")]
         public async Task<ActionResult<IEnumerable<Conversation>>> getConversations(int productId)
         {
@@ -38,10 +61,16 @@ namespace API.Controllers
                 return BadRequest("Not found");
             }
 
-            var conversations = await _context.Conversations.Where(x => x.ProductId == productId).ToListAsync();
+            var conversations = await _context.Conversations
+                                .Include(s => s.Sender)
+                                .Include(r => r.Receiver)
+                                .Include(p => p.Product)
+                                .Where(x => x.ProductId == productId)
+                                .ProjectTo<ConversationDto>(_mapper.ConfigurationProvider)
+                                .ToListAsync();
             if (conversations.Count > 0)
             {
-                return Ok(_mapper.Map<List<Conversation>, List<ConversationDto>>(conversations));
+                return Ok(_mapper.Map<List<ConversationDto>>(conversations));
             }
             return BadRequest("Unexpected Error!!!");
         }
@@ -61,7 +90,7 @@ namespace API.Controllers
             {
                 return Ok(_mapper.Map<List<Message>, List<MessageDto>>(msg));
             }
-            return BadRequest("Unexpected Error");
+            return Ok(null);
         }
 
         [HttpPost("conversation/create")]
@@ -71,22 +100,23 @@ namespace API.Controllers
             var user = await _context.Users.Where(x => x.UserName == username).FirstAsync();
             if (user == null)
             {
-                BadRequest("Not Authenticated");
+                return BadRequest("Not Authenticated");
             }
 
-            if (await _context.Users.AnyAsync(x => x.Id != conversation.SenderId || x.Id != conversation.ReceiverId))
+            if (!await _context.Users.AnyAsync(x => user.Id == conversation.SenderId || x.Id == conversation.ReceiverId))
             {
-                BadRequest("No Sender/Receipient found");
+                return BadRequest("No Sender/Receipient found");
             }
 
-            if (await _context.Products.AnyAsync(x => x.ProductId != conversation.ProductId))
+            if (!await _context.Products.AnyAsync(x => x.ProductId == conversation.ProductId))
             {
-                BadRequest("No Product found");
+                return BadRequest("No Product found");
             }
 
             var conv = _mapper.Map<ConversationDto, Conversation>(conversation);
             _context.Conversations.Add(conv);
-            if (await _context.SaveChangesAsync() > 0){
+            if (await _context.SaveChangesAsync() > 0)
+            {
                 return Ok(_mapper.Map<Conversation, ConversationDto>(conv));
             }
             return BadRequest("Something went east");
@@ -102,7 +132,7 @@ namespace API.Controllers
                 return BadRequest("No user found!!!");
             }
 
-            if (user.Id == message.SenderId)
+            if (user.Id != message.SenderId)
             {
                 return BadRequest("Not the sender error!");
             }

@@ -7,10 +7,8 @@ namespace API.Entity
         public int ConversationId { get; set; }
         public int ProductId { get; set; }
         public Product Product { get; set; }
-        [ForeignKey("User")]
         public int SenderId { get; set; }
         public User Sender { get; set; }
-        [ForeignKey("User")]
         public int ReceiverId { get; set; }
         public User Receiver { get; set; }
         public bool DeletedBySender { get; set; } = false;

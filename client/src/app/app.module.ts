@@ -24,6 +24,8 @@ import { MyItemsComponent } from './item/my-items/my-items.component';
 import { ToastrModule } from 'ngx-toastr';
 import { FavoritesComponent } from './favorites/favorites.component';
 import { MessageComponent } from './message/message.component';
+import { ConversationComponent } from './conversation/conversation.component';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { MessageComponent } from './message/message.component';
     LoginComponent,
     MyItemsComponent,
     FavoritesComponent,
-    MessageComponent
+    MessageComponent,
+    ConversationComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

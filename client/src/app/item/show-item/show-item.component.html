@@ -1,49 +1,54 @@
-<div class="row product-showcase">
-  <div class="col-md-7">
-    <a id="back-link" (click)="goBack()">< Go back to Result...</a>
-    <div class="product-img">
-      <h2>Gallery</h2>
-      <img src="../../assets/Images/no-image.jpg" alt="No Image" />
-    </div>
-  </div>
-  <div class="col-md-5 infoSection">
-    <div class="row">
-      <div class="owner-details">
-        <p *ngIf="product" class="product-date">
-          {{ product.insertedOn | date : "longDate" }}
-          <span class="product-address"
-            ><fa-icon [icon]="mapMarker"></fa-icon>{{ product.address }}</span
-          >
-        </p>
-        <h3 *ngIf="product" class="product-owner">{{ product.owner }}</h3>
-        <h2 *ngIf="product" class="product-name">{{ product.name }}</h2>
-        <p *ngIf="product" class="product-price">
-          <span>Price:</span> {{ product.price }} &euro;
-        </p>
-      </div>
-    </div>
-    <div class="row btnSection">
-      <div class="messageBtn">
-        <button class="btn btn-success">Send Message</button>
-      </div>
-      <div class="favoritesbtn">
-        <ng-container *ngIf="(product && product.insertedBy != user) || user == undefined">
-          <button class="btn btn-outline-success" (click)="addFavorite()">
-            Add To Favorites
-          </button>
-        </ng-container>
-      </div>
-    </div>
-  </div>
-</div>
 <div class="row">
-  <div class="product-details">
-    <h3>Description</h3>
-    <p *ngIf="product" class="product-description">
-      {{ product.description }}
-    </p>
+  <div class="row product-showcase">
+    <div class="col-md-7">
+      <a id="back-link" (click)="goBack()">< Go back to Result...</a>
+      <div class="product-img">
+        <h2>Gallery</h2>
+        <img src="../../assets/Images/no-image.jpg" alt="No Image" />
+      </div>
+    </div>
+    <div class="col-md-5 infoSection">
+      <div class="row">
+        <div class="owner-details">
+          <p *ngIf="product" class="product-date">
+            {{ product.insertedOn | date : "longDate" }}
+            <span class="product-address"
+              ><fa-icon [icon]="mapMarker"></fa-icon>{{ product.address }}</span
+            >
+          </p>
+          <h3 *ngIf="product" class="product-owner">{{ product.owner }}</h3>
+          <h2 *ngIf="product" class="product-name">{{ product.name }}</h2>
+          <p *ngIf="product" class="product-price">
+            <span>Price:</span> {{ product.price }} &euro;
+          </p>
+        </div>
+      </div>
+      <div class="row btnSection">
+        <div class="messageBtn">
+          <button class="btn btn-success">Send Message</button>
+        </div>
+        <div class="favoritesbtn">
+          <ng-container
+            *ngIf="(product && product.insertedBy != user) || user == undefined"
+          >
+            <button class="btn btn-outline-success" (click)="addFavorite()">
+              Add To Favorites
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="product-details">
+      <h3>Description</h3>
+      <p *ngIf="product" class="product-description">
+        {{ product.description }}
+      </p>
+    </div>
   </div>
 </div>
+
 <hr />
 <h2>Suggested</h2>
 <div
