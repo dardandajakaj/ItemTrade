@@ -33,5 +33,6 @@ namespace API.Entity
         public ICollection<Message> Messages { get; set; }
         public ICollection<Conversation> ConversationsSender { get; set; }
         public ICollection<Conversation> ConversationsReceiver { get; set; }
+        public ICollection<Category> Categories { get; set; }
     }
 }

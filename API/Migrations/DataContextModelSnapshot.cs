@@ -211,16 +211,21 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entity.UserFavorites", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "ProductId");
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("UserId", "ProductId");
 
                     b.HasIndex("ProductId");
 
@@ -230,7 +235,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entity.Category", b =>
                 {
                     b.HasOne("API.Entity.User", "User")
-                        .WithMany()
+                        .WithMany("Categories")
                         .HasForeignKey("AddedBy")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -243,19 +248,19 @@ namespace API.Migrations
                     b.HasOne("API.Entity.Product", "Product")
                         .WithMany("Conversations")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("API.Entity.User", "Receiver")
                         .WithMany("ConversationsReceiver")
                         .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("API.Entity.User", "Sender")
                         .WithMany("ConversationsSender")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Product");
@@ -276,7 +281,7 @@ namespace API.Migrations
                     b.HasOne("API.Entity.User", "Sender")
                         .WithMany("Messages")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Conversation");
@@ -295,7 +300,7 @@ namespace API.Migrations
                     b.HasOne("API.Entity.User", "User")
                         .WithMany("Products")
                         .HasForeignKey("InsertedBy")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -308,13 +313,13 @@ namespace API.Migrations
                     b.HasOne("API.Entity.Product", "Product")
                         .WithMany("UserFavorites")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("API.Entity.User", "User")
                         .WithMany("UserFavorites")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Product");
@@ -341,6 +346,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entity.User", b =>
                 {
+                    b.Navigation("Categories");
+
                     b.Navigation("ConversationsReceiver");
 
                     b.Navigation("ConversationsSender");

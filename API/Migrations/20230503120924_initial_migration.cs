@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class initialMigration : Migration
+    public partial class initial_migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -82,41 +82,39 @@ namespace API.Migrations
                         name: "FK_Products_Users_InsertedBy",
                         column: x => x.InsertedBy,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Messages",
+                name: "Conversations",
                 columns: table => new
                 {
-                    MessageId = table.Column<int>(type: "int", nullable: false)
+                    ConversationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     SenderId = table.Column<int>(type: "int", nullable: false),
                     ReceiverId = table.Column<int>(type: "int", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SentOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReadOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedBySender = table.Column<bool>(type: "bit", nullable: false),
                     DeletedByReceiver = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Messages", x => x.MessageId);
+                    table.PrimaryKey("PK_Conversations", x => x.ConversationId);
                     table.ForeignKey(
-                        name: "FK_Messages_Products_ProductId",
+                        name: "FK_Conversations_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Messages_Users_ReceiverId",
+                        name: "FK_Conversations_Users_ReceiverId",
                         column: x => x.ReceiverId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Messages_Users_SenderId",
+                        name: "FK_Conversations_Users_SenderId",
                         column: x => x.SenderId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -127,13 +125,15 @@ namespace API.Migrations
                 name: "UserFavorites",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserFavorites", x => new { x.UserId, x.ProductId });
+                    table.PrimaryKey("PK_UserFavorites", x => x.Id);
+                    table.UniqueConstraint("AK_UserFavorites_UserId_ProductId", x => new { x.UserId, x.ProductId });
                     table.ForeignKey(
                         name: "FK_UserFavorites_Products_ProductId",
                         column: x => x.ProductId,
@@ -143,8 +143,35 @@ namespace API.Migrations
                         name: "FK_UserFavorites_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ConversationId = table.Column<int>(type: "int", nullable: false),
+                    SenderId = table.Column<int>(type: "int", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SentOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Deleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_Conversations_ConversationId",
+                        column: x => x.ConversationId,
+                        principalTable: "Conversations",
+                        principalColumn: "ConversationId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Messages_Users_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -153,14 +180,24 @@ namespace API.Migrations
                 column: "AddedBy");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_ProductId",
-                table: "Messages",
+                name: "IX_Conversations_ProductId",
+                table: "Conversations",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_ReceiverId",
-                table: "Messages",
+                name: "IX_Conversations_ReceiverId",
+                table: "Conversations",
                 column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Conversations_SenderId",
+                table: "Conversations",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_ConversationId",
+                table: "Messages",
+                column: "ConversationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_SenderId",
@@ -190,6 +227,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserFavorites");
+
+            migrationBuilder.DropTable(
+                name: "Conversations");
 
             migrationBuilder.DropTable(
                 name: "Products");

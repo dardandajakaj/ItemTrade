@@ -45,7 +45,7 @@ namespace API.Controllers
             if(conversations.Count > 0){
                 return Ok(_mapper.Map<List<ConversationDto>>(conversations));
             }
-            return BadRequest("Unexpected Error!");
+            return BadRequest("No Conversations Found Error!");
         }
 
         [HttpGet("conversations/{productId}")]
