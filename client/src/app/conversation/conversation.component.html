@@ -74,14 +74,14 @@
 <div class="row content-section">
   <div class="col-md-3 participant-box">
     <div class="form-group">
-      <input class="form-control" type="text" name="searchParticipant" placeholder="Search...">
+      <input class="form-control" type="text" name="searchParticipant" placeholder="Search..." [(ngModel)]="chatter" (ngModelChange)="filterConversations()">
     </div>
     <ng-container *ngIf="conversations$ != null"; else noConversation>
       <div *ngFor="let conversation of conversations$ | async">
         <div class="participant" (click)="selectChat(conversation.conversationId)">
           <h4>
             {{
-              conversation.receiver == user["id"]
+              conversation.receiverId == user["id"]
                 ? conversation.sender
                 : conversation.receiver
             }}
@@ -99,15 +99,15 @@
       <ng-template #conversationHeader>
         {{ currentConversation.product }} -
         {{
-          currentConversation.receiver == user["id"]
+          currentConversation.receiverId == user["id"]
             ? currentConversation.sender
             : currentConversation.receiver
         }}
     </ng-template>
     </div>
     <div class="conversation-body">
-      <ng-container *ngIf="messages != null"; else conversationArea>
-        <div #conversationArea *ngFor="let message of messages">
+      <ng-container *ngIf="(chatService.messageThread$ | async) != null"; else conversationArea>
+        <div #conversationArea *ngFor="let message of (chatService.messageThread$ | async)">
           <p [ngClass]="message.senderId != user['id'] ? 'receiver' : 'sender'">{{message.content}}</p>
         </div>
     </ng-container>
@@ -115,8 +115,8 @@
     <div class="conversation-form">
       <div class="form-group">
         <div class="form-groupcard-footer text-muted d-flex justify-content-start align-items-center p-3">
-          <input type="text" class="form-control form-control-lg" name="" id="" aria-describedby="helpId" placeholder="Message...">
-          <fa-icon id="paper-plane" [icon]="faPaperPlane"></fa-icon>
+          <input type="text" class="form-control form-control-lg" name="" id="" aria-describedby="helpId" placeholder="Message..." [(ngModel)]="msg">
+          <fa-icon id="paper-plane" [icon]="faPaperPlane" (click)="sendMessage()"></fa-icon>
         </div>
       </div>
     </div>

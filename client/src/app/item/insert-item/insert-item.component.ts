@@ -8,7 +8,6 @@ import { Category } from '../../_Models/Category';
 import { UpdateProductDto } from '../../_Models/UpdateProductDto';
 import { ProductDto } from '../../_Models/ProductDto';
 import { ToastrService } from 'ngx-toastr';
-import { skip } from 'rxjs';
 
 
 @Component({

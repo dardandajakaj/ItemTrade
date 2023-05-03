@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   url: "https://localhost:7103/api/",
+  hub: "https://localhost:7103/chat",
   itemsPerPage: 5,
   pageNumber: 1
 };

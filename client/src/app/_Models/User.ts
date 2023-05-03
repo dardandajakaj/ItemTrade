@@ -8,4 +8,5 @@ export interface User {
   state: string;
   phone: string;
   dateOfBirth: Date;
+  token: string;
 }

@@ -7,6 +7,8 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using API.Hubs;
 
 namespace API.Controllers
 {
@@ -15,11 +17,13 @@ namespace API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly DataContext _context;
+        private readonly IHubContext<ChatHub> _hub;
 
-        public MessageController(DataContext context, IMapper mapper)
+        public MessageController(DataContext context, IMapper mapper, IHubContext<ChatHub> hub)
         {
             _mapper = mapper;
             _context = context;
+            _hub = hub;
         }
         [HttpGet("conversations/user/{userId}")]
         public async Task<ActionResult<IEnumerable<Conversation>>> getConversationOfUser(int userId){
@@ -140,6 +144,7 @@ namespace API.Controllers
 
             if (await _context.SaveChangesAsync() > 0)
             {
+                await _hub.Clients.All.SendAsync("NewMessages", message);
                 return Ok("Message Sent!");
             }
             return BadRequest("Something went east");

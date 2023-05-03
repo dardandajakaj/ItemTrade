@@ -224,9 +224,10 @@ namespace API.Controllers
             {
                 return BadRequest("No product found!");
             }
-            if (user.Role != 2 || user.Id != product.InsertedBy)
+            if (user.Id != product.InsertedBy)
             {
-                return BadRequest("Not permitted to do that!");
+                if(user.Role != 2)
+                    return BadRequest("Not permitted to do that!");
             }
 
 

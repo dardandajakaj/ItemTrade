@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Conversation } from '../_Models/Conversation';
 import { ChatService } from '../_Services/chat.service';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
-import { ProductService } from '../_Services/product.service';
 import { Message } from '../_Models/Message';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { MessageDto } from '../_Models/MessageDto';
 
 
 @Component({
@@ -13,13 +13,16 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.css']
 })
-export class ConversationComponent implements OnInit {
-  messages : Message[] = null;
+export class ConversationComponent implements OnInit, OnDestroy {
+  // messages : Message[] = null;
   conversations$ = new Observable<Conversation[]>;
   currentConversation : Conversation;
   user = JSON.parse(localStorage.getItem('user'));
   faPaperPlane = faPaperPlane;
-  constructor(private chatService: ChatService, private productService : ProductService, private toastR: ToastrService) { }
+  chatter: string = "";
+  msg: string;
+
+  constructor(public chatService: ChatService, private toastR: ToastrService) { }
 
   ngOnInit(): void {
     this.getAllConversations()
@@ -37,10 +40,32 @@ export class ConversationComponent implements OnInit {
   }
 
   selectChat(id: number){
-    this.messages = null;
+    // this.messages = null;
+    this.msg = "";
     this.conversations$.subscribe(data => this.currentConversation = data.find(x => x.conversationId == id))
-    this.chatService.getMessages(id).subscribe(response => {
-      this.messages = response;
-    })
+    console.log(this.user)
+    this.chatService.createHubConnection(this.user,id)
+  }
+
+  filterConversations(){
+
+  }
+
+  sendMessage(){
+    let date = new Date();
+    const message: MessageDto = {
+      conversationId : this.currentConversation.conversationId,
+      senderId : this.user['id'],
+      content : this.msg,
+      sentOn : date.toISOString()
+    };
+    this.chatService.sendMessage(message).then(() => {
+      this.msg = "";
+    });
+
+  }
+
+  ngOnDestroy(): void {
+    this.chatService.closeHubConnection();
   }
 }

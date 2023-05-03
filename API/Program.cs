@@ -2,12 +2,14 @@ using API.Extensions;
 using API.Data;
 using API.Middlewares;
 using System.Text.Json.Serialization;
+using API.Hubs;
 
 internal class Program
 {
     private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Services.AddSignalR();
         builder.Logging.ClearProviders();
         builder.Logging.AddConsole();
         // Add services to the container.
@@ -22,6 +24,8 @@ internal class Program
         builder.Services.AddSwaggerGen();
         //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());        
         var app = builder.Build();
+        app.UseDefaultFiles();
+        app.UseStaticFiles();
 
         // Configure the HTTP request pipeline.
         // if (app.Environment.IsDevelopment())
@@ -32,11 +36,13 @@ internal class Program
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseHttpsRedirection();
         app.UseRouting();
-        app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+        app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200").AllowCredentials());
+        app.MapHub<ChatHub>("/chat");
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
+        
         await Seed.Seeder(app);
         app.Run();
     }
