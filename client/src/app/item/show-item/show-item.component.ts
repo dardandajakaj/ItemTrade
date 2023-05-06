@@ -5,6 +5,7 @@ import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { Product } from 'src/app/_Models/Product';
 import { ProductService } from 'src/app/_Services/product.service';
 import { ToastrService } from 'ngx-toastr';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-show-item',
@@ -60,4 +61,13 @@ export class ShowItemComponent implements OnInit {
       this.router.navigateByUrl('/login')
     }
   }
+
+  sendMessage(){
+    if(this.user != undefined){
+      this.router.navigate(['messages'],{ queryParams : {product: this.product.productId}});
+    }else{
+      this.router.navigateByUrl('/login');
+    }
+  }
+
 }

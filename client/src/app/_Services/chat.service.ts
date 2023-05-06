@@ -8,6 +8,7 @@ import { MessageDto } from '../_Models/MessageDto';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { BehaviorSubject, take } from 'rxjs';
 import { User } from '../_Models/User';
+import { ConversationDto } from '../_Models/ConversationDto';
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +60,7 @@ export class ChatService {
     return this.hubConnection.invoke("SendMessage", message);
   }
 
-  createConversation(conversation: Conversation){
+  createConversation(conversation: ConversationDto){
     return this.http.post(environment.url + "message/conversation/create", conversation, {headers: this.header});
   }
 

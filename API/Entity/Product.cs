@@ -12,7 +12,7 @@ namespace API.Entity
         public int InsertedBy { get; set; }
         public DateTime InsertedOn { get; set; }
 
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; } = 1;
         public float Price { get; set; }
         public bool IsSale { get; set; }
 

@@ -11,9 +11,6 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 export class SidebarComponent implements OnInit {
   @Input() categories: Category[];
   @Output() searchEventEmitter = new EventEmitter<FormGroup>();
-  // @Output() addPriceRangeEvent = new EventEmitter<number[]>();
-  // @Output() addPriceFilterEvent = new EventEmitter<boolean>();
-  // @Output() addDateFilterEvent = new EventEmitter<boolean>();
   sideForm : FormGroup;
   minValue : number = 1;
   maxValue : number = 2000;
@@ -55,8 +52,4 @@ export class SidebarComponent implements OnInit {
     this.sideForm.reset();
     this.searchEventEmitter.emit(this.sideForm.value)
   }
-
-  // priceRangeEvent(){
-  //   this.addPriceRangeEvent.emit([this.minValue, this.maxValue]);
-  // }
 }

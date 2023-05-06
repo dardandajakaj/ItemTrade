@@ -117,7 +117,11 @@ namespace API.Controllers
                 return BadRequest("No Product found");
             }
 
-            var conv = _mapper.Map<ConversationDto, Conversation>(conversation);
+            if(await _context.Conversations.AnyAsync(x => x.ProductId == conversation.ProductId && x.SenderId == conversation.SenderId && x.ReceiverId == conversation.ReceiverId)){
+                return BadRequest("Conversation Exists!");
+            }
+
+            var conv = _mapper.Map<Conversation>(conversation);
             _context.Conversations.Add(conv);
             if (await _context.SaveChangesAsync() > 0)
             {

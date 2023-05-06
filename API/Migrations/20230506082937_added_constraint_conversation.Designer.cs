@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230503120924_initial_migration")]
-    partial class initial_migration
+    [Migration("20230506082937_added_constraint_conversation")]
+    partial class added_constraint_conversation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,7 +76,7 @@ namespace API.Migrations
 
                     b.HasKey("ConversationId");
 
-                    b.HasIndex("ProductId");
+                    b.HasAlternateKey("ProductId", "SenderId", "ReceiverId");
 
                     b.HasIndex("ReceiverId");
 
@@ -125,7 +125,7 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"), 1L, 1);
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -239,7 +239,7 @@ namespace API.Migrations
                     b.HasOne("API.Entity.User", "User")
                         .WithMany("Categories")
                         .HasForeignKey("AddedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -256,13 +256,13 @@ namespace API.Migrations
                     b.HasOne("API.Entity.User", "Receiver")
                         .WithMany("ConversationsReceiver")
                         .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("API.Entity.User", "Sender")
                         .WithMany("ConversationsSender")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Product");
@@ -283,7 +283,7 @@ namespace API.Migrations
                     b.HasOne("API.Entity.User", "Sender")
                         .WithMany("Messages")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Conversation");
@@ -295,9 +295,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Entity.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
 
                     b.HasOne("API.Entity.User", "User")
                         .WithMany("Products")
@@ -315,13 +313,13 @@ namespace API.Migrations
                     b.HasOne("API.Entity.Product", "Product")
                         .WithMany("UserFavorites")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("API.Entity.User", "User")
                         .WithMany("UserFavorites")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Product");

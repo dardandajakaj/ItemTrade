@@ -74,11 +74,21 @@
 <div class="row content-section">
   <div class="col-md-3 participant-box">
     <div class="form-group">
-      <input class="form-control" type="text" name="searchParticipant" placeholder="Search..." [(ngModel)]="chatter" (ngModelChange)="filterConversations()">
+      <input
+        class="form-control"
+        type="text"
+        name="searchParticipant"
+        placeholder="Search..."
+        [(ngModel)]="chatter"
+        (ngModelChange)="filterConversations()"
+      />
     </div>
-    <ng-container *ngIf="conversations$ != null"; else noConversation>
+    <ng-container *ngIf="conversations$ != null" ; else noConversation>
       <div *ngFor="let conversation of conversations$ | async">
-        <div class="participant" (click)="selectChat(conversation.conversationId)">
+        <div
+          class="participant"
+          (click)="selectChat(conversation.conversationId)"
+        >
           <h4>
             {{
               conversation.receiverId == user["id"]
@@ -86,16 +96,18 @@
                 : conversation.receiver
             }}
           </h4>
-          <h5>{{conversation.product}}</h5>
+          <h5>{{ conversation.product }}</h5>
         </div>
-        <hr>
+        <hr />
       </div>
     </ng-container>
     <ng-template #noConversation><h4>No Conversation Found!</h4></ng-template>
   </div>
   <div class="col-md-9 conversation-box">
     <div class="conversation-header">
-      <ng-container *ngIf="currentConversation == null; else conversationHeader">Messages</ng-container>
+      <ng-container *ngIf="currentConversation == null; else conversationHeader"
+        >Messages</ng-container
+      >
       <ng-template #conversationHeader>
         {{ currentConversation.product }} -
         {{
@@ -103,22 +115,47 @@
             ? currentConversation.sender
             : currentConversation.receiver
         }}
-    </ng-template>
+      </ng-template>
     </div>
     <div class="conversation-body">
-      <ng-container *ngIf="(chatService.messageThread$ | async) != null"; else conversationArea>
-        <div #conversationArea *ngFor="let message of (chatService.messageThread$ | async)">
-          <p [ngClass]="message.senderId != user['id'] ? 'receiver' : 'sender'">{{message.content}}</p>
+      <ng-container
+        *ngIf="(chatService.messageThread$ | async) != null"
+        ;
+        else
+        conversationArea
+      >
+        <div
+          #conversationArea
+          *ngFor="let message of chatService.messageThread$ | async"
+        >
+          <p [ngClass]="message.senderId != user['id'] ? 'receiver' : 'sender'">
+            {{ message.content }}
+          </p>
         </div>
-    </ng-container>
+      </ng-container>
     </div>
     <div class="conversation-form">
       <div class="form-group">
-        <div class="form-groupcard-footer text-muted d-flex justify-content-start align-items-center p-3">
-          <input type="text" class="form-control form-control-lg" name="" id="" aria-describedby="helpId" placeholder="Message..." [(ngModel)]="msg">
-          <fa-icon id="paper-plane" [icon]="faPaperPlane" (click)="sendMessage()"></fa-icon>
+        <div
+          class="form-groupcard-footer text-muted d-flex justify-content-start align-items-center p-3"
+        >
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            name=""
+            id=""
+            aria-describedby="helpId"
+            placeholder="Message..."
+            [(ngModel)]="msg"
+            (keyup.enter)="sendMessage()"
+          />
+          <fa-icon
+            id="paper-plane"
+            [icon]="faPaperPlane"
+            (click)="sendMessage()"
+          ></fa-icon>
         </div>
       </div>
     </div>
-    </div>
   </div>
+</div>
