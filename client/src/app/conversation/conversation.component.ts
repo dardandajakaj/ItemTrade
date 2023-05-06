@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Conversation } from '../_Models/Conversation';
 import { ChatService } from '../_Services/chat.service';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, take } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { MessageDto } from '../_Models/MessageDto';
 import { Product } from '../_Models/Product';
@@ -16,7 +16,6 @@ import { ConversationDto } from '../_Models/ConversationDto';
   styleUrls: ['./conversation.component.css']
 })
 export class ConversationComponent implements OnInit, OnDestroy {
-  // messages : Message[] = null;
   product: Product;
   conversations$ = new Observable<Conversation[]>;
   currentConversation: Conversation;
@@ -25,7 +24,12 @@ export class ConversationComponent implements OnInit, OnDestroy {
   chatter: string = "";
   msg: string;
 
-  constructor(public chatService: ChatService, private route: ActivatedRoute, private productService: ProductService, private router: Router, private toastR: ToastrService) { }
+  constructor(
+    public chatService: ChatService,
+    private route: ActivatedRoute,
+    private productService: ProductService,
+    private router: Router,
+    private toastR: ToastrService) { }
 
   ngOnInit(): void {
     this.getAllConversations();
@@ -63,13 +67,29 @@ export class ConversationComponent implements OnInit, OnDestroy {
   }
 
   selectChat(id: number) {
-    // this.messages = null;
     this.msg = "";
     this.conversations$.subscribe(data => this.currentConversation = data.find(x => x.conversationId == id))
     this.chatService.createHubConnection(this.user, id)
   }
 
   filterConversations() {
+    if (this.chatter != "") {
+      this.conversations$ = this.conversations$.pipe(
+        map(
+          conversations => conversations.filter(
+            conversation =>
+              conversation.receiver.toLowerCase().includes(this.chatter.toLowerCase())
+              || conversation.sender.toLowerCase().includes(this.chatter.toLowerCase())
+              || conversation.product.toLowerCase().includes(this.chatter.toLowerCase())
+          )))
+    }else{
+      this.conversations$ = this.conversations$.pipe(
+        map(
+          conversations => conversations.filter(() => true)
+        )
+      )
+    }
+
 
   }
 
