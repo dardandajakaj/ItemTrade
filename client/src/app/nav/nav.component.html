@@ -1,4 +1,4 @@
-<div id="site-nav">
+<!-- <div id="site-nav">
   <div class="web-container">
     <a (click)="goHome()" routerLinkActive="router-link-active">
       <div id="site-logo-header" route>
@@ -19,10 +19,10 @@
         <div class="col"><a class="btn btn-outline-success" [routerLink]="['/favorites']" routerLinkActive="router-link-active" >Favorites</a></div>
       </div>
 
-      <!--Signin SECTION-->
+      Signin SECTION
       <div id="site-signing">
         <div class="row">
-          <!--signin/signup button and Form-->
+          signin/signup button and Form>
           <div *ngIf="!(accountService.currentUser$ | async)" class="col">
             <a
               class="btn btn-outline-success"
@@ -62,4 +62,48 @@
       </div>
     </nav>
   </div>
-</div>
+</div> -->
+<!-- Navbar -->
+<nav
+  class="navbar navbar-expand-lg navbar-scroll fixed-top shadow-0 border-bottom border-dark"
+>
+  <div class="container">
+    <a class="navbar-brand" href="#!"><i class="fab fa-mdb fa-4x"></i></a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      (click)="isCollapsed = !isCollapsed"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <fa-icon [icon]="faBars"></fa-icon>
+    </button>
+    <div
+      [ngbCollapse]="isCollapsed"
+      class="collapse navbar-collapse"
+      id="navbarSupportedContent"
+    >
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" (click)="goHome()">Home</a>
+        </li>
+        <li
+          class="nav-item"
+          *ngIf="!(accountService.currentUser$ | async);else LogOut"
+          #LogOut
+        >
+          <a class="nav-link" [routerLink]="['/login']">SignIn/Up</a>
+        </li>
+        <ng-template #LogOut>
+          <li class="nav-item"><a class="nav-link" [routerLink]="['/favorites']">Favorites</a></li>
+          <li class="nav-item"><a class="nav-link" [routerLink]="['/my-items']">My Items</a></li>
+          <li class="nav-item"><a class="nav-link" [routerLink]="['/insert-item']">Add Items</a></li>
+          <li class="nav-item">
+            <a class="nav-link" (click)="onLogout()">Logout</a>
+          </li>
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+</nav>

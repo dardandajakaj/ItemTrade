@@ -67,3 +67,9 @@ input[type="radio"]:checked + label{
 label[for=Categories]{
   font-size: 1.7rem;
 }
+
+@media screen and (max-witdh: 864px) {
+  #sidebar{
+    display: block;
+  }
+}
