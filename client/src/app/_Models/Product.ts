@@ -1,3 +1,5 @@
+import { Photo } from "./Photo";
+
 export interface Product {
   productId: number;
   name: string;
@@ -10,4 +12,5 @@ export interface Product {
   owner: string;
   address: string;
   categoryName: string;
+  photos: Photo[]
 }

@@ -25,7 +25,10 @@ import { ToastrModule } from 'ngx-toastr';
 import { FavoritesComponent } from './favorites/favorites.component';
 import { MessageComponent } from './message/message.component';
 import { ConversationComponent } from './conversation/conversation.component';
-import { ChatComponent } from './chat/chat.component';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { environment } from 'src/environments/environment';
+import { getStorage, provideStorage } from '@angular/fire/storage';
+
 
 @NgModule({
   declarations: [
@@ -46,7 +49,6 @@ import { ChatComponent } from './chat/chat.component';
     FavoritesComponent,
     MessageComponent,
     ConversationComponent,
-    ChatComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +60,9 @@ import { ChatComponent } from './chat/chat.component';
     ReactiveFormsModule,
     CommonModule,
     SharedModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideStorage(() => getStorage())
   ],
   providers: [],
   bootstrap: [AppComponent]

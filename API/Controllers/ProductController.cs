@@ -31,6 +31,7 @@ namespace API.Controllers
             var products = _context.Products
                                 .Include(u => u.User)
                                 .Include(c => c.Category)
+                                .Include(p => p.Photos.Where(x => x.IsMain))
                                 .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
                                 .AsNoTracking();
             if (filterParams != null)
@@ -81,6 +82,7 @@ namespace API.Controllers
             var products = _context.Products
                             .Include(u => u.User)
                             .Include(c => c.Category)
+                            .Include(p => p.Photos.Where(x => x.IsMain))
                             .Where(x => x.User.Id == userId)
                             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
                             .AsNoTracking();
@@ -93,7 +95,11 @@ namespace API.Controllers
         [HttpGet("item/{productId}")]
         public async Task<ActionResult<ProductDto>> getProductById(int productId)
         {
-            var product = await _context.Products.Include(u => u.User).Include(c => c.Category).Where(x => x.ProductId == productId).FirstOrDefaultAsync();
+            var product = await _context.Products
+                .Include(u => u.User)
+                .Include(c => c.Category)
+                .Include(p => p.Photos.Where(x => x.IsMain))
+                .Where(x => x.ProductId == productId).FirstOrDefaultAsync();
             return Ok(_mapper.Map<ProductDto>(product));
         }
 
@@ -106,6 +112,7 @@ namespace API.Controllers
             var productList = _context.Products
                                 .Include(u => u.User)
                                 .Include(c => c.Category)
+                                .Include(p => p.Photos)
                                 .Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()))
                                 .ProjectTo<ProductDto>(_mapper.ConfigurationProvider).AsNoTracking();
 
@@ -122,6 +129,7 @@ namespace API.Controllers
             var products = _context.Products
                                 .Include(u => u.User)
                                 .Include(c => c.Category)
+                                .Include(p => p.Photos.Where(x => x.IsMain))
                                 .Where(p => p.CategoryId == categoryId).ProjectTo<ProductDto>(_mapper.ConfigurationProvider).AsNoTracking();
             var result = await PagedList<ProductDto>.CreateAsync(products, productParams.PageNumber, productParams.ItemsPerPage);
             Response.AddPaginationHeader(result.TotalItems, result.ItemsPerPage, result.TotalPages, result.CurrentPage);
@@ -135,7 +143,12 @@ namespace API.Controllers
             var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var user = await _context.Users.Where(x => x.UserName == username).FirstAsync();
             var elements = await _context.UserFavorites.Where(x => x.UserId == user.Id).Select(x => x.ProductId).ToListAsync();
-            var products = _context.Products.Include(u => u.User).Include(c => c.Category).Where(x => elements.Contains(x.ProductId)).ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
+            var products = _context.Products
+                                .Include(u => u.User)
+                                .Include(c => c.Category)
+                                .Include(p => p.Photos.Where(x => x.IsMain))
+                                .Where(x => elements.Contains(x.ProductId))
+                                .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
                                 .AsNoTracking(); ;
             if (filterParams != null)
             {
@@ -180,7 +193,7 @@ namespace API.Controllers
 
         [HttpPost("item/add")]
         [Authorize]
-        public async Task<ActionResult> addProduct(RegisterProductDto registerProductDto)
+        public async Task<ActionResult<ICollection<ProductDto>>> addProduct(RegisterProductDto registerProductDto)
         {
             if (!await _context.Users.AnyAsync(x => x.Id == registerProductDto.InsertedBy))
             {
@@ -196,10 +209,26 @@ namespace API.Controllers
                 Price = registerProductDto.Price,
                 IsSale = registerProductDto.IsSale
             };
+
             _context.Products.Add(product);
             if (await _context.SaveChangesAsync() > 0)
             {
-                return Ok();
+                foreach (var file in registerProductDto.Photos)
+                {
+                    _context.Photos.Add(new Photo()
+                    {
+                        Filename = file.Filename,
+                        BelongsTo = product.ProductId,
+                        IsMain = file.IsMain
+                    });
+                }
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    return Ok(_mapper.Map<ProductDto>(product));
+                }
+                else{
+                    return Ok("No photos stored");
+                }
             }
             else
             {
@@ -226,7 +255,7 @@ namespace API.Controllers
             }
             if (user.Id != product.InsertedBy)
             {
-                if(user.Role != 2)
+                if (user.Role != 2)
                     return BadRequest("Not permitted to do that!");
             }
 
@@ -271,7 +300,7 @@ namespace API.Controllers
             }
             return BadRequest("Something went South!!!");
         }
-        
+
         [HttpDelete("favorites/remove/{productId}"), Authorize]
         public async Task<ActionResult> removeFavorite(int productId)
         {
@@ -282,7 +311,8 @@ namespace API.Controllers
                 return BadRequest("Something went South");
             }
             var item = await _context.UserFavorites.Where(x => x.ProductId == productId && x.UserId == user.Id).FirstOrDefaultAsync();
-            if(item == null){
+            if (item == null)
+            {
                 return BadRequest();
             }
             _context.UserFavorites.Remove(item);

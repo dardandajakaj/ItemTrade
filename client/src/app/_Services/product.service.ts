@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Product } from '../_Models/Product';
@@ -114,9 +114,9 @@ export class ProductService {
     );
   }
 
-  registerProduct(productDto: ProductDto) {
+  registerProduct(product: ProductDto) {
 
-    return this.http.post(environment.url + 'product/item/add', productDto, { headers: this.header });
+    return this.http.post(environment.url + 'product/item/add',product, { headers: this.header });
   }
 
   editProduct(productDto: UpdateProductDto, id: number) {

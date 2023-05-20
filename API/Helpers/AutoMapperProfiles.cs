@@ -11,7 +11,8 @@ namespace API.Helpers
             CreateMap<Product, ProductDto>()
                     .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.User.Fullname))
                     .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.User.Street + ", " + src.User.City + ' ' + src.User.State))
-                    .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name));
+                    .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name))
+                    .ForMember(dest => dest.Photos, opt => opt.MapFrom(src => src.Photos));
             CreateMap<User, UserDto>();
             CreateMap<UpdateProductDto, Product>();
             CreateMap<Conversation, ConversationDto>()

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Conversation } from '../_Models/Conversation';
 import { ChatService } from '../_Services/chat.service';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, filter, map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { MessageDto } from '../_Models/MessageDto';
 import { Product } from '../_Models/Product';

@@ -15,5 +15,6 @@ namespace API.Dto
         public string Owner { get; set; }
         public string Address { get; set; }
         public string CategoryName { get; set; }
+        public ICollection<Photo> Photos { get; set; }
     }
 }

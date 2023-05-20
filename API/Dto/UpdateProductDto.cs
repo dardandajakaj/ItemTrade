@@ -12,5 +12,6 @@ namespace API.Dto
        public int CategoryId { get; set; }
        public float Price { get; set; }
        public bool isSale { get; set; }
+       public ICollection<IFormFile> Photos { get; set; }
     }
 }

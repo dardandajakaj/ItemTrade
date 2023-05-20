@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Entity;
 
 namespace API.Dto
 {
@@ -14,5 +15,6 @@ namespace API.Dto
         public int CategoryId { get; set; }
         public float Price { get; set; }
         public bool IsSale { get; set; }
+        public ICollection<PhotoDto> Photos { get; set; }
     }
 }

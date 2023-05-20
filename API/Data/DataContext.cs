@@ -14,6 +14,7 @@ namespace API.Data
         public DbSet<UserFavorites> UserFavorites { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Photo> Photos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -30,6 +31,7 @@ namespace API.Data
             builder.Entity<Conversation>().HasOne(c => c.Sender).WithMany(s => s.ConversationsSender).HasForeignKey(c => new { c.SenderId }).OnDelete(DeleteBehavior.ClientCascade);
             builder.Entity<Message>().HasOne(m => m.Conversation).WithMany(c => c.Messages).HasForeignKey(m => new { m.ConversationId }).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Message>().HasOne(m => m.Sender).WithMany(s => s.Messages).HasForeignKey(m => new { m.SenderId }).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Photo>().HasOne(p => p.Product).WithMany(pr => pr.Photos ).HasForeignKey(p => new{p.BelongsTo}).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

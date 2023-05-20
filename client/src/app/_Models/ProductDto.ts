@@ -1,3 +1,5 @@
+import { Photo } from "./Photo";
+
 export interface ProductDto{
   name: string;
   description: string;
@@ -6,4 +8,5 @@ export interface ProductDto{
   categoryId: number;
   price: number;
   isSale: boolean;
+  photos: Photo[];
 }

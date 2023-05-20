@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "diplomaapp-6bea8": {
+      "hosting": {
+        "client": [
+          "diplomaapp-6bea8"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "diplomaapp-6bea8"
+  }
+}

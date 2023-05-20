@@ -4,16 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-
-#nullable disable
 
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230510101748_PhotoMainDefaultSet")]
+    partial class PhotoMainDefaultSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,11 +126,11 @@ namespace API.Migrations
                     b.Property<int>("BelongsTo")
                         .HasColumnType("int");
 
-                    b.Property<string>("Filename")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsMain")
+                    b.Property<bool>("isMain")
                         .HasColumnType("bit");
+
+                    b.Property<string>("sourcePath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -4,7 +4,7 @@
       <a id="back-link" (click)="goBack()">< Go back to Result...</a>
       <div class="product-img">
         <h2>Gallery</h2>
-        <img src="../../assets/Images/no-image.jpg" alt="No Image" />
+        <img [src]="imagePath" alt="image" /> <!--Must show photo here-->
       </div>
     </div>
     <div class="col-md-5 infoSection">

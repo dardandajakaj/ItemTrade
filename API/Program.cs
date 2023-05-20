@@ -3,6 +3,7 @@ using API.Data;
 using API.Middlewares;
 using System.Text.Json.Serialization;
 using API.Hubs;
+using Microsoft.Extensions.FileProviders;
 
 internal class Program
 {

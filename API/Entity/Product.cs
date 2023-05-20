@@ -24,5 +24,6 @@ namespace API.Entity
 
         public ICollection<UserFavorites> UserFavorites { get; set; }
         public ICollection<Conversation> Conversations { get; set; }
+        public ICollection<Photo> Photos { get; set; }
     }
 }
